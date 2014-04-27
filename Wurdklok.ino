@@ -3,16 +3,15 @@
 Wurdklok
  */
 #include <SoftwareSerial.h>
-SoftwareSerial mySerial = SoftwareSerial(6, 7); // RX, TX
+SoftwareSerial mySerial = SoftwareSerial(6,7); // RX, TX
 
 String commandBT = "";           // a string to hold incoming bluetooth command
 boolean commandEnded = false;    // whether the command is completely received
 
 
 void setup() {
-  pinMode(STATUS_LED, OUTPUT);
-  
   mySerial.begin(9600);
+  pinMode(STATUS_LED, OUTPUT);
   commandBT.reserve(64);
   show_current_time();
   mySerial.println("Initiated");  
@@ -34,10 +33,7 @@ void loop() {
   if (loopCounter % LOOP_BLUETOOTH == 0) {
     while (mySerial.available()) {
       // get the new byte:
-      char inChar = (char)
-      
-      
-      mySerial.read(); 
+      char inChar = (char)mySerial.read(); 
       // add it to the inputString:
       commandBT += inChar;
       // if the incoming character is a newline, set a flag

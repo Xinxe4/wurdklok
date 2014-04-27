@@ -239,13 +239,13 @@ public class BluetoothHC05 extends Activity {
      */
     private void receiveMessage(String message) {
         if (message.length() > 0) {
+        	boolean limCharFound = false;
         	try {
 				receivedText = receivedText.concat(message);
 				message = "";
 				while (receivedText.contains(";")) {
-					if (message == "") {
-						message = receivedText;
-					} else {
+					limCharFound = true;
+					{
 						message = message.concat(receivedText.substring(0, receivedText.indexOf(";")));
 						receivedText = receivedText.substring(1+receivedText.indexOf(";"));
 					}
@@ -254,7 +254,9 @@ public class BluetoothHC05 extends Activity {
 				// TODO Auto-generated catch block
 				Log.e(TAG, e.toString());
 			}
-	        mAlarmText.setText(message);
+        	if (limCharFound) {
+        		mAlarmText.setText(message);
+        	}
         }
     }
 

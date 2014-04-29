@@ -1,4 +1,3 @@
-#include <ShiftRegister595.h>
 
 bool displayTime;
 int hours;

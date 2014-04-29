@@ -3,15 +3,15 @@
 Wurdklok
  */
 #include <SoftwareSerial.h>
-SoftwareSerial mySerial = SoftwareSerial(6,7); // RX, TX
+SoftwareSerial mySerial = SoftwareSerial(PORT_BT_TX,PORT_BT_RX); // (RX, TX)
 
 String commandBT = "";           // a string to hold incoming bluetooth command
 boolean commandEnded = false;    // whether the command is completely received
 
 
 void setup() {
+  hardware_initialize();
   mySerial.begin(9600);
-  pinMode(STATUS_LED, OUTPUT);
   commandBT.reserve(64);
   show_current_time();
   mySerial.println("Initiated");  

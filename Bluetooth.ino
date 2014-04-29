@@ -4,10 +4,10 @@ void decodeBTCommand(String command) {
   //mySerial.write("Decoding...;");
   if (command == "on;") {
     mySerial.write("LED On;");
-    digitalWrite(STATUS_LED, 0);
+    digitalWrite(PORT_STATUS_LED, 0);
   } else if (command == "off;") {
     mySerial.write("LED Off;");
-    digitalWrite(STATUS_LED, 1);
+    digitalWrite(PORT_STATUS_LED, 1);
    } else if (command == "GA;") {
      mySerial.write("GA;");
      String str; char c[3];

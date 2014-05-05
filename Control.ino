@@ -5,5 +5,6 @@ void hardware_initialize() {
   pinMode(PORT_SRCL, OUTPUT);
   pinMode(PORT_SROE, OUTPUT);
   pinMode(PORT_SRLA, OUTPUT);
+  pinMode(PORT_LIGHT_SENSOR, INPUT);
 }
 

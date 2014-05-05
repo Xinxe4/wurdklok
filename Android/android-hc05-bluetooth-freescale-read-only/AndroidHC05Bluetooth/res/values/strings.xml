@@ -31,18 +31,18 @@
     <string name="scanning">Sykje nei apparaten&#8230;</string>
     <string name="select_device">Kies een apparaat om mei te ferbinen</string>
     <string name="none_paired">No devices have been paired</string>
-    <string name="none_found">No devices found</string>
+    <string name="none_found">Gjin apparaten fûn</string>
     <string name="title_paired_devices">Paired Devices</string>
-    <string name="title_other_devices">Other Available Devices</string>
-    <string name="button_scan">Scan for devices</string>
+    <string name="title_other_devices">Oare apparaten</string>
+    <string name="button_scan">Scan nei apparaten</string>
 
     <!-- Options Menu -->
     <string name="connect">Ferbien mei in apparaat</string>
     <string name="discoverable">Meitsje sichtber</string>
     
     <!--  Buttons -->
-    <string name="sendMenos">Off</string>
-    <string name="sendMas">On</string>
+    <string name="sendMenos">Oan</string>
+    <string name="sendMas">Ut</string>
     <string name="send_text">Stjoer tekst</string>
     <string name="message">Berjocht</string>
 </resources>

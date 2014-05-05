@@ -1,5 +1,6 @@
-*/bin/*
-*/gen/*
+Android/android-hc05-bluetooth-freescale-read-only/testBluetoothFreescale
+Android/android-hc05-bluetooth-freescale-read-only/AndroidHC05Bluetooth/bin
+Android/android-hc05-bluetooth-freescale-read-only/AndroidHC05Bluetooth/gen
 .svn
 *.svn
 *.apk

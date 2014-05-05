@@ -14,7 +14,7 @@ void setup() {
   mySerial.begin(9600);
   commandBT.reserve(64);
   show_current_time();
-  mySerial.println("Initiated");  
+  mySerial.println("Initiated;");  
 }
 
 void loop() {

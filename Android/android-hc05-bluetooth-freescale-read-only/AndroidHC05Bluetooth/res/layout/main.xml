@@ -13,12 +13,11 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    android:layout_margin="@dimen/small_pad"
+    android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,35 +31,94 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/small_pad"
+          android:orientation="horizontal" >
+	
+          <TextView
+              android:id="@+id/textView2"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="left|center_vertical"
+              android:text="@string/alarm"
+              android:textAppearance="?android:attr/textAppearanceMedium" />
+                      
+          <TextView
+              android:id="@+id/alarm_time"
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:layout_marginLeft="@dimen/small_pad"
+              android:layout_marginRight="@dimen/small_pad"
+              android:layout_weight="1"
+              android:textAppearance="?android:attr/textAppearanceLarge" />
 
-        <Button
-            android:id="@+id/button_mas"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:text="@string/sendMas" />
-               
-    </LinearLayout>
+          <ToggleButton
+              android:id="@+id/toggleAlarmButton"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_vertical"
+              android:text="@string/on"
+              android:textOff="@string/off"
+              android:textOn="@string/on" />
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+      </LinearLayout>
 
-        <Button
-            android:id="@+id/button_menos"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:text="@string/sendMenos" />
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical" >
 
-    </LinearLayout>
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="@dimen/small_pad" >
+
+              <TextView
+                  android:id="@+id/textView3"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="center_vertical"
+                  android:text="@string/brightness"
+                  android:textAppearance="?android:attr/textAppearanceMedium" />
+
+              <TextView
+                  android:id="@+id/textView4"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="center_vertical"
+                  android:layout_marginLeft="@dimen/small_pad"
+                  android:layout_marginRight="@dimen/small_pad"
+                  android:layout_weight="1"
+                  android:text=""
+                  android:textAppearance="?android:attr/textAppearanceMedium" />
+
+              <ToggleButton
+                  android:id="@+id/toggleBrightnessButton"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="center_vertical"
+                  android:text="@string/auto"
+                  android:textOff="@string/auto"
+                  android:textOn="@string/auto" />
+
+          </LinearLayout>
+
+          <SeekBar
+              android:id="@+id/brightness_slider"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_margin="@dimen/small_pad" />
+
+      </LinearLayout>
 
     <EditText
         android:id="@+id/text_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/small_pad"
         android:ems="10"
         android:hint="@string/message" >
 
@@ -74,15 +132,10 @@
         android:text="@string/send_text" />
 
     <TextView
-        android:id="@+id/text_alarm"
+        android:id="@+id/text_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/small_pad"
         android:text="@string/nothing_received" />
-
-    <Button
-        android:id="@+id/btn_getalarm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/get_alarm_time" />
 
 </LinearLayout>

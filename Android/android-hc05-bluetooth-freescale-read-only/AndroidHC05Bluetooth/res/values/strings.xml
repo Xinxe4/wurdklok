@@ -26,7 +26,13 @@
     <string name="make_connection">"Meitsje ferbining mei bluetooth HC-05"</string>
 	<string name="nothing_received">"Neat ûntfongen"</string>
 	<string name="get_alarm_time">"Helje alarm tiid"</string>
-	
+	<string name="alarm">"Alarm"</string>
+	<string name="brightness">"Helderens"</string>
+	<string name="on">Oan</string>
+    <string name="off">Ut</string>
+    <string name="auto">Auto</string>
+    <string name="self">Sels</string>
+    
     <!--  DeviceListActivity -->
     <string name="scanning">Sykje nei apparaten&#8230;</string>
     <string name="select_device">Kies een apparaat om mei te ferbinen</string>

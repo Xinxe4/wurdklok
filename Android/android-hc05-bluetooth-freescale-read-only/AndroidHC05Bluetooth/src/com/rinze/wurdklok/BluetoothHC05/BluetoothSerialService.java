@@ -154,11 +154,20 @@ public class BluetoothSerialService {
         // Start the thread to manage the connection and perform transmissions
         mConnectedThread = new ConnectedThread(socket);
         mConnectedThread.start();
-
-        // Send the name of the connected device back to the UI Activity
-        Message msg = mHandler.obtainMessage(BluetoothHC05.MESSAGE_DEVICE_NAME);
+        
+        {
+        	// Send the name of the connected device back to the UI Activity
+	        Message msg = mHandler.obtainMessage(BluetoothHC05.MESSAGE_DEVICE_NAME);
+	        Bundle bundle = new Bundle();
+	        bundle.putString(BluetoothHC05.DEVICE_NAME, device.getName());
+	        msg.setData(bundle);
+	        mHandler.sendMessage(msg);
+        }
+        
+        // Send the address of the connected device back to the UI Activity
+        Message msg = mHandler.obtainMessage(BluetoothHC05.MESSAGE_DEVICE_ADDRESS);
         Bundle bundle = new Bundle();
-        bundle.putString(BluetoothHC05.DEVICE_NAME, device.getName());
+        bundle.putString(BluetoothHC05.DEVICE_ADDRESS, device.getAddress());
         msg.setData(bundle);
         mHandler.sendMessage(msg);
 
@@ -235,6 +244,7 @@ public class BluetoothSerialService {
 
             // Create a new listening server socket
             try {
+            	if (D) Log.d(TAG, "Try listenUsingRfcommWithServiceRecord");
                 tmp = mAdapter.listenUsingRfcommWithServiceRecord(NAME, MY_UUID);
             } catch (IOException e) {
                 Log.e(TAG, "listen() failed", e);
@@ -423,7 +433,7 @@ public class BluetoothSerialService {
                     // Read from the InputStream
                     bytes = mmInStream.read(buffer);
                     String str = new String(buffer,0,bytes);
-                    Log.i(TAG,"Received "+str);
+                    //Log.i(TAG,"Received "+str);
                     
                     // Send the obtained bytes to the UI Activity
 //                    mHandler.obtainMessage(BluetoothHC05.MESSAGE_READ, bytes, -1, buffer).sendToTarget();

@@ -16,32 +16,32 @@ void decodeBTCommand(String command) {
      str = String(get_minutes());
      mySerial.print(str);mySerial.write(";");
   } else if (command.startsWith("ST")) {
-     mySerial.write("Set time:");
+     //mySerial.write("Set time:");
      String hrs = command.substring(2,4);
      String mins = command.substring(4,6);
      int h = decodeString(hrs);
      int m = decodeString(mins);
      set_hours(h);
      set_minutes(m);
-     mySerial.print(h);mySerial.write(":");mySerial.print(m);mySerial.write(";");
+     //mySerial.print(h);mySerial.write(":");mySerial.print(m);mySerial.write(";");
   } else if (command == "GM;") {
      mySerial.write("GM;");
      boolean mb = get_manual_brightness();
      mySerial.print(mb);mySerial.write(";");
   } else if (command.startsWith("SM")) {
-     mySerial.write("Manual brightness:");
+     //mySerial.write("Manual brightness:");
      String toggle = command.substring(2,3);
      boolean mb = decodeString(toggle);
      set_manual_brightness(mb);
-     mySerial.print(toggle);
-     mySerial.write(";");
+     //mySerial.print(toggle);
+     //mySerial.write(";");
   } else if (command.startsWith("SB")) {
-     mySerial.write("Set brightness:");
+     //mySerial.write("Set brightness:");
      String bright = command.substring(2,5);
      int br = decodeString(bright);
      set_brightness_value(br);
-     mySerial.print(br);
-     mySerial.write(";");
+     //mySerial.print(br);
+     //mySerial.write(";");
   }
 }
   

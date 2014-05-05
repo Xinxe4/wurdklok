@@ -16,10 +16,14 @@
 
 package com.rinze.wurdklok.BluetoothHC05;
 
+import java.util.ArrayList;
+
+import android.R.bool;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -31,15 +35,17 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.rinze.wurdklok.BluetoothHC05.R;
+import android.widget.ToggleButton;
 
 /**
  * This is the main Activity that displays the current chat session.
  */
 public class BluetoothHC05 extends Activity {
+	public static final String PREFS_NAME = "WurdklokPrefs";
+	
     // Debugging
     private static final String TAG = "BluetoothChat";
     private static final boolean D = true;
@@ -50,25 +56,35 @@ public class BluetoothHC05 extends Activity {
     public static final int MESSAGE_WRITE = 3;
     public static final int MESSAGE_DEVICE_NAME = 4;
     public static final int MESSAGE_TOAST = 5;
+    public static final int MESSAGE_DEVICE_ADDRESS = 6;
     
     private String receivedText = "";
+    private ArrayList<String> cmdBuffer = new ArrayList<String>();
+    
+    // Return Intent extra
+    public static final String EXTRA_DEVICE_ADDRESS = "device_address";
 
     // Key names received from the BluetoothChatService Handler
+    public static final String DEVICE_ADDRESS = "device_mac";
     public static final String DEVICE_NAME = "device_name";
     public static final String TOAST = "toast";
     public static final String MESSAGE_TEXT = "message_text";
+    
+    public static final String LAST_CONNECTED_DEVICE = "lastConnectedDevice";
 
     // Intent request codes
     private static final int REQUEST_CONNECT_DEVICE = 1;
     private static final int REQUEST_ENABLE_BT = 2;
 
+    private ArrayList<View> activeViews = new ArrayList<View>();
+    
     // Layout Views
     private TextView mTitle;
-    private Button mSendButtonMas;
-    private Button mSendButtonMenos;
     private Button mSendButtonText;
     private TextView mMessage;
-    private Button mGetAlarmButton;
+    private ToggleButton mAlarmToggle;
+    private ToggleButton mBrightnessToggle;
+    private SeekBar mBrightnessSlider;
     private TextView mAlarmText;
     
     // Name of the connected device
@@ -118,6 +134,16 @@ public class BluetoothHC05 extends Activity {
         // Otherwise, setup the chat session
         } else {
             if (mChatService == null) setupChat();
+            
+        	SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+            String lastAddress = settings.getString(LAST_CONNECTED_DEVICE, "");
+            if(D) Log.i(TAG, "Last connected device: " + lastAddress);
+            if (BluetoothAdapter.checkBluetoothAddress(lastAddress)) {
+            	if(D) Log.i(TAG, "Last connected device valid");
+            	Intent connect = new Intent();
+            	connect.putExtra(EXTRA_DEVICE_ADDRESS, lastAddress);
+                onActivityResult(REQUEST_CONNECT_DEVICE, Activity.RESULT_OK, connect);
+            }
         }
     }
 
@@ -140,25 +166,6 @@ public class BluetoothHC05 extends Activity {
 
     private void setupChat() {
         Log.d(TAG, "setupChat()");
-
-        // Initialize the send button with a listener that for click events
-        mSendButtonMas = (Button) findViewById(R.id.button_mas);
-        mSendButtonMas.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                // Send a message using content of the edit text widget                
-                sendMessage("off;");
-            }
-        });
-        
-        mSendButtonMenos = (Button) findViewById(R.id.button_menos);
-        mSendButtonMenos.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                // Send a message using content of the edit text widget
-                sendMessage("on;");
-            }
-        });
-        
-        mMessage = (TextView) findViewById(R.id.text_message);
         
         mSendButtonText = (Button) findViewById(R.id.button_send);
         mSendButtonText.setOnClickListener(new OnClickListener() {
@@ -169,20 +176,40 @@ public class BluetoothHC05 extends Activity {
             }
         });
         
-        mAlarmText = (TextView) findViewById(R.id.text_alarm);
+        mMessage = (TextView) findViewById(R.id.text_message);
+        mAlarmText = (TextView) findViewById(R.id.alarm_time);
+        mAlarmToggle = (ToggleButton) findViewById(R.id.toggleAlarmButton);
+        mBrightnessSlider = (SeekBar) findViewById(R.id.brightness_slider);
+        mBrightnessToggle = (ToggleButton) findViewById(R.id.toggleBrightnessButton);
         
-        mGetAlarmButton = (Button) findViewById(R.id.btn_getalarm);
-        mGetAlarmButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                // Send a message using content of the edit text widget
-                sendMessage("GA;");
-            }
-        });
+        activeViews.add(mAlarmText);
+        activeViews.add(mAlarmToggle);
+        activeViews.add(mBrightnessSlider);
+        activeViews.add(mBrightnessToggle);
+        activeViews.add(mSendButtonText);
+        
+        mAlarmText = (TextView) findViewById(R.id.text_status);
+        
+        // Deactivate views until connection is made
+        activateViews(activeViews, false);
         
         // Initialize the BluetoothChatService to perform bluetooth connections
         mChatService = new BluetoothSerialService(this, mHandler);
     }
 
+    private void activateViews(ArrayList<View> a, Boolean b) {
+    	for (int i = 0; i < a.size(); i++) {
+    		a.get(i).setEnabled(b);
+    	}
+    	if(D) Log.e(TAG, "activateViews" + String.valueOf(b));
+    }
+    
+    private void updateSettings() {
+    	//activateViews(activeViews, true);
+    	mSendButtonText.setEnabled(true);
+    	sendMessage("GM;");
+    }
+    
     @Override
     public synchronized void onPause() {
         super.onPause();
@@ -246,7 +273,7 @@ public class BluetoothHC05 extends Activity {
 				while (receivedText.contains(";")) {
 					limCharFound = true;
 					{
-						message = message.concat(receivedText.substring(0, receivedText.indexOf(";")));
+						message = message.concat(receivedText.substring(0, receivedText.indexOf(";")+1));
 						receivedText = receivedText.substring(1+receivedText.indexOf(";"));
 					}
 				}
@@ -254,8 +281,38 @@ public class BluetoothHC05 extends Activity {
 				// TODO Auto-generated catch block
 				Log.e(TAG, e.toString());
 			}
-        	if (limCharFound) {
+        	
+        	if (limCharFound) { // At least 1 complete command received
+    			if(D){Log.i(TAG, message);}
         		mAlarmText.setText(message);
+        		while (message.contains(";")) {
+        			String cmd = message.substring(0, message.indexOf(";"));
+        			if (message.indexOf(";") != message.length()) {
+        				message = message.substring(1+message.indexOf(";"));
+        			}
+        			cmdBuffer.add(cmd);      			
+        		}
+        		cmdBuffer.add(message);
+        		
+        		while (cmdBuffer.size() > 4) {
+	        		if (cmdBuffer.size() > 0) {
+	        			if(D){Log.i(TAG, "Decode: " + cmdBuffer.get(0));}
+		    			if (cmdBuffer.get(0).contains("GM")) {
+		    				if (cmdBuffer.size() > 1) {
+		    					int man = Integer.parseInt(cmdBuffer.get(1).substring(0,1));
+								mBrightnessSlider.setEnabled(man>0);
+								mBrightnessToggle.setEnabled(man>0);
+								mBrightnessToggle.setChecked(man>0);
+								cmdBuffer.remove(0);
+								cmdBuffer.remove(1);
+								cmdBuffer.trimToSize();
+		    				}
+						} else {
+							cmdBuffer.remove(0);
+							cmdBuffer.trimToSize();
+						}
+	        		}
+        		}
         	}
         }
     }
@@ -270,7 +327,8 @@ public class BluetoothHC05 extends Activity {
                 switch (msg.arg1) {
                 case BluetoothSerialService.STATE_CONNECTED:
                     mTitle.setText(R.string.title_connected_to);
-                    mTitle.append(mConnectedDeviceName);                    
+                    mTitle.append(mConnectedDeviceName);
+                    updateSettings();
                     break;
                 case BluetoothSerialService.STATE_CONNECTING:
                     mTitle.setText(R.string.title_connecting);
@@ -297,6 +355,12 @@ public class BluetoothHC05 extends Activity {
                 Toast.makeText(getApplicationContext(), msg.getData().getString(TOAST),
                                Toast.LENGTH_SHORT).show();
                 break;
+	        case MESSAGE_DEVICE_ADDRESS:
+	            SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+	            SharedPreferences.Editor editor = settings.edit();
+	            editor.putString(LAST_CONNECTED_DEVICE, msg.getData().getString(DEVICE_ADDRESS));
+	            editor.commit();
+	            break;
             }
         }
     };
@@ -308,8 +372,7 @@ public class BluetoothHC05 extends Activity {
             // When DeviceListActivity returns with a device to connect
             if (resultCode == Activity.RESULT_OK) {
                 // Get the device MAC address
-                String address = data.getExtras()
-                                     .getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
+                String address = data.getExtras().getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
                 // Get the BLuetoothDevice object
                 BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
                 // Attempt to connect to the device

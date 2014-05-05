@@ -16,7 +16,6 @@ int get_light_intensity() {
   if (scaledValue > 255) {
     scaledValue = 255;
   }
-  mySerial.print(value);mySerial.write(";");
   return (255 - scaledValue);
 }
 

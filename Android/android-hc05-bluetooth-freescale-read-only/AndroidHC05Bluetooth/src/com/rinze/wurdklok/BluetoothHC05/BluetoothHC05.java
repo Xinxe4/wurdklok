@@ -16,9 +16,10 @@
 
 package com.rinze.wurdklok.BluetoothHC05;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
-import android.R.bool;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -33,9 +34,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -57,6 +62,8 @@ public class BluetoothHC05 extends Activity {
     public static final int MESSAGE_DEVICE_NAME = 4;
     public static final int MESSAGE_TOAST = 5;
     public static final int MESSAGE_DEVICE_ADDRESS = 6;
+    
+    static final String[] nrs = new String[] {"1","2","3","4","5","6","7","8","9","10","11","12" };
     
     private String receivedText = "";
     private ArrayList<String> cmdBuffer = new ArrayList<String>();
@@ -81,6 +88,8 @@ public class BluetoothHC05 extends Activity {
     // Layout Views
     private TextView mTitle;
     private Button mSendButtonText;
+    private Button mSetTime;
+    private Button mOpenMatrix;
     private TextView mMessage;
     private ToggleButton mAlarmToggle;
     private ToggleButton mBrightnessToggle;
@@ -101,14 +110,14 @@ public class BluetoothHC05 extends Activity {
         if(D) Log.e(TAG, "+++ ON CREATE +++");
 
         // Set up the window layout
-        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+        //requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         setContentView(R.layout.main);
-        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
+        //getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
 
         // Set up the custom title
-        mTitle = (TextView) findViewById(R.id.title_left_text);
-        mTitle.setText(R.string.app_name);
-        mTitle = (TextView) findViewById(R.id.title_right_text);
+        //mTitle = (TextView) findViewById(R.id.title_left_text);
+        //mTitle.setText(R.string.app_name);
+        //mTitle = (TextView) findViewById(R.id.title_right_text);
 
         // Get local Bluetooth adapter
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -119,6 +128,7 @@ public class BluetoothHC05 extends Activity {
             finish();
             return;
         }
+        
     }
 
     @Override
@@ -129,8 +139,9 @@ public class BluetoothHC05 extends Activity {
         // If BT is not on, request that it be enabled.
         // setupChat() will then be called during onActivityResult
         if (!mBluetoothAdapter.isEnabled()) {
-            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+            //Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            //startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+        	Toast.makeText(this, "Warning: Bluetooth disabled!", Toast.LENGTH_SHORT).show();
         // Otherwise, setup the chat session
         } else {
             if (mChatService == null) setupChat();
@@ -145,6 +156,32 @@ public class BluetoothHC05 extends Activity {
                 onActivityResult(REQUEST_CONNECT_DEVICE, Activity.RESULT_OK, connect);
             }
         }
+        
+        mOpenMatrix = (Button) findViewById(R.id.button_matrix);
+        mOpenMatrix.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+            	if(D) Log.i(TAG, "Open matrix");
+            	setContentView(R.layout.drawing);
+            	GridView mMatrix = (GridView) findViewById(R.id.gridView1);
+        		ArrayAdapter<String> adapter = new ArrayAdapter<String>(BluetoothHC05.this,android.R.layout.simple_list_item_1, nrs);
+        		mMatrix.setAdapter(adapter);
+        		
+        		sendMessage("MD02;");
+        		
+        		mMatrix.setOnItemClickListener(new OnItemClickListener() {
+        			public void onItemClick(AdapterView<?> parent, View v,int position, long id) {
+        			   DecimalFormat d = new DecimalFormat("00");
+                   	   String msg = "SS" + d.format(position) + ";";
+        			   sendMessage(msg);
+        			   Toast.makeText(getApplicationContext(),msg, Toast.LENGTH_SHORT).show();
+        			}
+        		});
+        		
+                //Intent intent = new Intent(BluetoothHC05.this, Drawing.class);
+                //startActivity(intent);
+                //sendMessage(msg);
+            }
+        });
     }
 
     @Override
@@ -176,11 +213,53 @@ public class BluetoothHC05 extends Activity {
             }
         });
         
+        mSetTime = (Button) findViewById(R.id.button_setcurrenttime);
+        mSetTime.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+            	if(D) Log.i(TAG, "Send current time");
+                Calendar c = Calendar.getInstance();
+                int hr = c.get(Calendar.HOUR_OF_DAY);
+                int mi = c.get(Calendar.MINUTE);
+                DecimalFormat d = new DecimalFormat("00");
+            	String msg = "ST" + d.format(hr) + d.format(mi) + ";";
+                sendMessage(msg);
+                if(D) Log.i(TAG, "Sent:" + msg);
+            }
+        });
+        
+        
+
+        
         mMessage = (TextView) findViewById(R.id.text_message);
         mAlarmText = (TextView) findViewById(R.id.alarm_time);
         mAlarmToggle = (ToggleButton) findViewById(R.id.toggleAlarmButton);
         mBrightnessSlider = (SeekBar) findViewById(R.id.brightness_slider);
+        mBrightnessSlider.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				String str = "SB" + String.format("%03d", seekBar.getProgress()) + ";";
+				sendMessage(str);
+			}
+			public void onStartTrackingTouch(SeekBar seekBar) {	
+			}
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+			}
+		});
+        
         mBrightnessToggle = (ToggleButton) findViewById(R.id.toggleBrightnessButton);
+        mBrightnessToggle.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				ToggleButton mTB = (ToggleButton) v;
+				if(mTB.isChecked()) {
+//					mBrightnessSlider.setEnabled(true);
+//        			mBrightnessToggle.setChecked(false);
+					sendMessage("SM1;");
+				} else {
+//					mBrightnessSlider.setEnabled(false);
+//        			mBrightnessToggle.setChecked(true);
+					sendMessage("SM0;");
+				}
+			}
+		});
         
         activeViews.add(mAlarmText);
         activeViews.add(mAlarmToggle);
@@ -205,8 +284,9 @@ public class BluetoothHC05 extends Activity {
     }
     
     private void updateSettings() {
-    	//activateViews(activeViews, true);
+    	activateViews(activeViews, true);
     	mSendButtonText.setEnabled(true);
+    	sendMessage("GB;");
     	sendMessage("GM;");
     }
     
@@ -294,19 +374,30 @@ public class BluetoothHC05 extends Activity {
         		}
         		cmdBuffer.add(message);
         		
-        		while (cmdBuffer.size() > 4) {
+        		while (cmdBuffer.size() > 0) {
+        			if(D){Log.i(TAG, "cmdBuffer.size: " + Integer.toString(cmdBuffer.size()));}
 	        		if (cmdBuffer.size() > 0) {
 	        			if(D){Log.i(TAG, "Decode: " + cmdBuffer.get(0));}
 		    			if (cmdBuffer.get(0).contains("GM")) {
 		    				if (cmdBuffer.size() > 1) {
 		    					int man = Integer.parseInt(cmdBuffer.get(1).substring(0,1));
 								mBrightnessSlider.setEnabled(man>0);
-								mBrightnessToggle.setEnabled(man>0);
-								mBrightnessToggle.setChecked(man>0);
+								mBrightnessToggle.setChecked(man<1);
 								cmdBuffer.remove(0);
 								cmdBuffer.remove(1);
 								cmdBuffer.trimToSize();
 		    				}
+						} else if (cmdBuffer.get(0).contains("GB")) {
+							if (cmdBuffer.size() > 1) {
+		    					int man = Integer.parseInt(cmdBuffer.get(1).substring(0));
+		    					mBrightnessSlider.setProgress(man);
+								cmdBuffer.remove(0);
+								cmdBuffer.remove(1);
+								cmdBuffer.trimToSize();
+							}
+						} else if (cmdBuffer.get(0).contains("END")) {
+								cmdBuffer.remove(0);
+								cmdBuffer.trimToSize();
 						} else {
 							cmdBuffer.remove(0);
 							cmdBuffer.trimToSize();
@@ -326,16 +417,16 @@ public class BluetoothHC05 extends Activity {
                 if(D) Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
                 switch (msg.arg1) {
                 case BluetoothSerialService.STATE_CONNECTED:
-                    mTitle.setText(R.string.title_connected_to);
-                    mTitle.append(mConnectedDeviceName);
+                    getActionBar().setTitle(getResources().getString(R.string.title_connected_to) + mConnectedDeviceName);
+                    //mTitle.append(mConnectedDeviceName);
                     updateSettings();
                     break;
                 case BluetoothSerialService.STATE_CONNECTING:
-                    mTitle.setText(R.string.title_connecting);
+                	getActionBar().setTitle(R.string.title_connecting);
                     break;
                 case BluetoothSerialService.STATE_LISTEN:
                 case BluetoothSerialService.STATE_NONE:
-                    mTitle.setText(R.string.title_not_connected);
+                	getActionBar().setTitle(R.string.title_not_connected);
                     break;
                 }
                 break;
@@ -396,7 +487,8 @@ public class BluetoothHC05 extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.option_menu, menu);
+        //inflater.inflate(R.menu.option_menu, menu);
+        inflater.inflate(R.menu.main_activity_actions, menu);
         return true;
     }
 

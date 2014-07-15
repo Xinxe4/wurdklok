@@ -26,6 +26,8 @@
     <string name="make_connection">"Meitsje ferbining mei bluetooth HC-05"</string>
 	<string name="nothing_received">"Neat ûntfongen"</string>
 	<string name="get_alarm_time">"Helje alarm tiid"</string>
+	<string name="set_time">"Stel de tiid yn"</string>
+	<string name="open_matrix">Iepenje matrix</string>
 	<string name="alarm">"Alarm"</string>
 	<string name="brightness">"Helderens"</string>
 	<string name="on">Oan</string>
@@ -43,8 +45,8 @@
     <string name="button_scan">Scan nei apparaten</string>
 
     <!-- Options Menu -->
-    <string name="connect">Ferbien mei in apparaat</string>
-    <string name="discoverable">Meitsje sichtber</string>
+    <string name="connect">Ferbine</string>
+    <string name="discoverable">Sichtber</string>
     
     <!--  Buttons -->
     <string name="sendMenos">Oan</string>

@@ -37,7 +37,7 @@ public class Drawing extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
  
-		setContentView(R.layout.drawing);
+		setContentView(R.layout.drawingfragment);
  
 		mMatrix = (GridView) findViewById(R.id.gridView1);
  

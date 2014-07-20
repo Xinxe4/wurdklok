@@ -158,9 +158,8 @@ void show_current_time() {
           break;     
     }    
   }
-  if (currentMode = CLOCK_MODE) {
-    printMatrix(ledBits);
-  }
+  
+  printMatrix(ledBits);
 }
 
 void set_led(int nr) {
@@ -172,6 +171,16 @@ void set_led(int nr) {
   printMatrix(ledBits);
 }
 
+void clear_matrix() {
+  memfill(drawing, NR_LEDS, 0);
+  printMatrix(drawing);
+}
+
+void add_to_drawing(int led) {
+  compose2(led, drawing);
+  printMatrix(drawing);
+}
+
 static void compose(const int arrayToAdd[], int ledBits[]) {
   int pos;
   int i = 0;
@@ -179,6 +188,39 @@ static void compose(const int arrayToAdd[], int ledBits[]) {
     ledBits[pos] = 1;
   }
 }
+
+static void compose2(int ledToAdd, int ledBits[]) {
+   ledBits[ledToAdd] = 1;
+}
+
+void print_temperature() {
+  float T = get_temperature();
+  T = T * 10;
+  int Ti = (int)T;
+  String Ts = String(Ti);
+  char Tc[Ts.length()+1];
+  Ts.toCharArray(Tc,Ts.length()+1);
+  
+  int ledBits[NR_LEDS];
+  memfill(ledBits, NR_LEDS, 0);
+  
+  for (int i=0; i<Ts.length(); i++) {
+    if (i<Ts.length()-1) {
+      print_char_4x5(ledBits, i*5, 0, Tc[i]);
+    } else {
+      print_char_4x5(ledBits, (i*5)+1, 0, Tc[i]);
+    }
+  }
+
+  if (Ts.length() == 2) {
+    compose2(79,ledBits);
+  } else if (Ts.length() == 3) {
+    compose2(84,ledBits);
+  }
+  
+  printMatrix(ledBits);
+}
+
 
 /**
 Fill the given array with the given value.

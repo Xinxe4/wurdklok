@@ -20,14 +20,18 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Fragment;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -49,11 +53,15 @@ import android.widget.ToggleButton;
  * This is the main Activity that displays the current chat session.
  */
 public class BluetoothHC05 extends Activity {
+	public static Context appContext;
 	public static final String PREFS_NAME = "WurdklokPrefs";
 	
+	public static int height, width;
+	public static BluetoothHC05 mSingleton;
+	
     // Debugging
-    private static final String TAG = "BluetoothChat";
-    private static final boolean D = true;
+	protected static final String TAG = "BluetoothChat";
+    protected static final boolean D = true;
 
     // Message types sent from the BluetoothChatService Handler
     public static final int MESSAGE_STATE_CHANGE = 1;
@@ -87,14 +95,6 @@ public class BluetoothHC05 extends Activity {
     
     // Layout Views
     private TextView mTitle;
-    private Button mSendButtonText;
-    private Button mSetTime;
-    private Button mOpenMatrix;
-    private TextView mMessage;
-    private ToggleButton mAlarmToggle;
-    private ToggleButton mBrightnessToggle;
-    private SeekBar mBrightnessSlider;
-    private TextView mAlarmText;
     
     // Name of the connected device
     private String mConnectedDeviceName = null;   
@@ -109,16 +109,35 @@ public class BluetoothHC05 extends Activity {
         super.onCreate(savedInstanceState);
         if(D) Log.e(TAG, "+++ ON CREATE +++");
 
+        mSingleton = this;
         // Set up the window layout
-        //requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         setContentView(R.layout.main);
-        //getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
 
-        // Set up the custom title
-        //mTitle = (TextView) findViewById(R.id.title_left_text);
-        //mTitle.setText(R.string.app_name);
-        //mTitle = (TextView) findViewById(R.id.title_right_text);
+        //ActionBar gets initiated
+        ActionBar actionbar = getActionBar();
+        //Tell the ActionBar we want to use Tabs.
+        actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        //initiating both tabs and set text to it.
+        ActionBar.Tab MainTab = actionbar.newTab().setText("Main");
+        ActionBar.Tab DrawingTab = actionbar.newTab().setText("Drawing");
+        
+        //create the two fragments we want to use for display content
+        Fragment MainFragment = new MainFragment();
+        Fragment DrawingFragment = new DrawingFragment();
+        
+        //set the Tab listener. Now we can listen for clicks.
+        MainTab.setTabListener(new MyTabsListener(MainFragment, getApplicationContext()));
+        DrawingTab.setTabListener(new MyTabsListener(DrawingFragment,getApplicationContext()));
 
+        //add the two tabs to the actionbar
+        actionbar.addTab(MainTab);
+        actionbar.addTab(DrawingTab);
+        
+    	DisplayMetrics metrics = new DisplayMetrics();
+    	getWindowManager().getDefaultDisplay().getMetrics(metrics);
+    	height = metrics.heightPixels;
+    	width  = metrics.widthPixels;
+        
         // Get local Bluetooth adapter
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -139,8 +158,8 @@ public class BluetoothHC05 extends Activity {
         // If BT is not on, request that it be enabled.
         // setupChat() will then be called during onActivityResult
         if (!mBluetoothAdapter.isEnabled()) {
-            //Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            //startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
         	Toast.makeText(this, "Warning: Bluetooth disabled!", Toast.LENGTH_SHORT).show();
         // Otherwise, setup the chat session
         } else {
@@ -156,32 +175,6 @@ public class BluetoothHC05 extends Activity {
                 onActivityResult(REQUEST_CONNECT_DEVICE, Activity.RESULT_OK, connect);
             }
         }
-        
-        mOpenMatrix = (Button) findViewById(R.id.button_matrix);
-        mOpenMatrix.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-            	if(D) Log.i(TAG, "Open matrix");
-            	setContentView(R.layout.drawing);
-            	GridView mMatrix = (GridView) findViewById(R.id.gridView1);
-        		ArrayAdapter<String> adapter = new ArrayAdapter<String>(BluetoothHC05.this,android.R.layout.simple_list_item_1, nrs);
-        		mMatrix.setAdapter(adapter);
-        		
-        		sendMessage("MD02;");
-        		
-        		mMatrix.setOnItemClickListener(new OnItemClickListener() {
-        			public void onItemClick(AdapterView<?> parent, View v,int position, long id) {
-        			   DecimalFormat d = new DecimalFormat("00");
-                   	   String msg = "SS" + d.format(position) + ";";
-        			   sendMessage(msg);
-        			   Toast.makeText(getApplicationContext(),msg, Toast.LENGTH_SHORT).show();
-        			}
-        		});
-        		
-                //Intent intent = new Intent(BluetoothHC05.this, Drawing.class);
-                //startActivity(intent);
-                //sendMessage(msg);
-            }
-        });
     }
 
     @Override
@@ -204,73 +197,6 @@ public class BluetoothHC05 extends Activity {
     private void setupChat() {
         Log.d(TAG, "setupChat()");
         
-        mSendButtonText = (Button) findViewById(R.id.button_send);
-        mSendButtonText.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                // Send a message using content of the edit text widget
-            	String msg = mMessage.getText().toString();
-                sendMessage(msg);
-            }
-        });
-        
-        mSetTime = (Button) findViewById(R.id.button_setcurrenttime);
-        mSetTime.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-            	if(D) Log.i(TAG, "Send current time");
-                Calendar c = Calendar.getInstance();
-                int hr = c.get(Calendar.HOUR_OF_DAY);
-                int mi = c.get(Calendar.MINUTE);
-                DecimalFormat d = new DecimalFormat("00");
-            	String msg = "ST" + d.format(hr) + d.format(mi) + ";";
-                sendMessage(msg);
-                if(D) Log.i(TAG, "Sent:" + msg);
-            }
-        });
-        
-        
-
-        
-        mMessage = (TextView) findViewById(R.id.text_message);
-        mAlarmText = (TextView) findViewById(R.id.alarm_time);
-        mAlarmToggle = (ToggleButton) findViewById(R.id.toggleAlarmButton);
-        mBrightnessSlider = (SeekBar) findViewById(R.id.brightness_slider);
-        mBrightnessSlider.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-			public void onStopTrackingTouch(SeekBar seekBar) {
-				String str = "SB" + String.format("%03d", seekBar.getProgress()) + ";";
-				sendMessage(str);
-			}
-			public void onStartTrackingTouch(SeekBar seekBar) {	
-			}
-			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-			}
-		});
-        
-        mBrightnessToggle = (ToggleButton) findViewById(R.id.toggleBrightnessButton);
-        mBrightnessToggle.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				ToggleButton mTB = (ToggleButton) v;
-				if(mTB.isChecked()) {
-//					mBrightnessSlider.setEnabled(true);
-//        			mBrightnessToggle.setChecked(false);
-					sendMessage("SM1;");
-				} else {
-//					mBrightnessSlider.setEnabled(false);
-//        			mBrightnessToggle.setChecked(true);
-					sendMessage("SM0;");
-				}
-			}
-		});
-        
-        activeViews.add(mAlarmText);
-        activeViews.add(mAlarmToggle);
-        activeViews.add(mBrightnessSlider);
-        activeViews.add(mBrightnessToggle);
-        activeViews.add(mSendButtonText);
-        
-        mAlarmText = (TextView) findViewById(R.id.text_status);
-        
-        // Deactivate views until connection is made
-        activateViews(activeViews, false);
         
         // Initialize the BluetoothChatService to perform bluetooth connections
         mChatService = new BluetoothSerialService(this, mHandler);
@@ -285,7 +211,6 @@ public class BluetoothHC05 extends Activity {
     
     private void updateSettings() {
     	activateViews(activeViews, true);
-    	mSendButtonText.setEnabled(true);
     	sendMessage("GB;");
     	sendMessage("GM;");
     }
@@ -320,12 +245,12 @@ public class BluetoothHC05 extends Activity {
             startActivity(discoverableIntent);
         }
     }
-
+    
     /**
      * Sends a message.
      * @param message  A string of text to send.
      */
-    private void sendMessage(String message) {
+    public void sendMessage(String message) {
         // Check that we're actually connected before trying anything
         if (mChatService.getState() != BluetoothSerialService.STATE_CONNECTED) {
             Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
@@ -364,7 +289,6 @@ public class BluetoothHC05 extends Activity {
         	
         	if (limCharFound) { // At least 1 complete command received
     			if(D){Log.i(TAG, message);}
-        		mAlarmText.setText(message);
         		while (message.contains(";")) {
         			String cmd = message.substring(0, message.indexOf(";"));
         			if (message.indexOf(";") != message.length()) {
@@ -381,8 +305,8 @@ public class BluetoothHC05 extends Activity {
 		    			if (cmdBuffer.get(0).contains("GM")) {
 		    				if (cmdBuffer.size() > 1) {
 		    					int man = Integer.parseInt(cmdBuffer.get(1).substring(0,1));
-								mBrightnessSlider.setEnabled(man>0);
-								mBrightnessToggle.setChecked(man<1);
+								//mBrightnessSlider.setEnabled(man>0);
+								//mBrightnessToggle.setChecked(man<1);
 								cmdBuffer.remove(0);
 								cmdBuffer.remove(1);
 								cmdBuffer.trimToSize();
@@ -390,7 +314,7 @@ public class BluetoothHC05 extends Activity {
 						} else if (cmdBuffer.get(0).contains("GB")) {
 							if (cmdBuffer.size() > 1) {
 		    					int man = Integer.parseInt(cmdBuffer.get(1).substring(0));
-		    					mBrightnessSlider.setProgress(man);
+		    					//mBrightnessSlider.setProgress(man);
 								cmdBuffer.remove(0);
 								cmdBuffer.remove(1);
 								cmdBuffer.trimToSize();

@@ -13,6 +13,8 @@ String commandBT = "";           // a string to hold incoming bluetooth command
 boolean commandEnded = false;    // whether the command is completely received
 static int currentMode;          // What mode the clock is in (clock, temperature, etc)
 
+int drawing[NR_LEDS];
+
 void setup() {
   mySerial.begin(9600);
   hardware_initialize();
@@ -32,7 +34,9 @@ void loop() {
   static unsigned long loopCounter;
   
   if (loopCounter % LOOP_CLOCK == 0) {
-    show_current_time();
+    if (currentMode == CLOCK_MODE) {
+      show_current_time();
+    }
   }
   if (loopCounter % LOOP_ALARM == 0) {
     check_for_alarm();
@@ -42,6 +46,9 @@ void loop() {
   }
   if (loopCounter % LOOP_TEMPERATURE == 0) {
     read_temperature();
+    if (currentMode == TEMPERATURE_MODE) {
+      print_temperature();
+    }
   }
   
   if (loopCounter % LOOP_BLUETOOTH == 0) {
@@ -67,4 +74,9 @@ void loop() {
   loopCounter++;
 }
 
-
+void setCurrentMode(int mode) {
+  currentMode = mode;
+  if (mode == DRAW_MODE) {
+    clear_matrix();
+  }
+}

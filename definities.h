@@ -4,7 +4,7 @@
 #define INTERVAL 10
 #define LOOP_CLOCK (60000 / INTERVAL)
 #define LOOP_BRIGHTNESS (500 / INTERVAL)
-#define LOOP_TEMPERATURE (600 / INTERVAL)
+#define LOOP_TEMPERATURE (1000 / INTERVAL)
 #define LOOP_BLUETOOTH (20 / INTERVAL) //20 ms
 #define LOOP_ALARM (10000 / INTERVAL) // Check alarm every 10 sec
 #define FULL_AMBIENT_LIGHT 1 // Measurement of the photo resistor for maximum light

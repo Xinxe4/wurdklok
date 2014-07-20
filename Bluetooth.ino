@@ -50,6 +50,10 @@ void decodeBTCommand(String command) {
     mySerial.print(get_brightness_value());
     mySerial.write(";");
   } 
+  else if (command == "PT;") {
+    setCurrentMode(TEMPERATURE_MODE);
+    print_temperature();
+  } 
   else if (command.startsWith("SB")) {
     //mySerial.write("Set brightness:");
     String bright = command.substring(2,5);
@@ -63,13 +67,13 @@ void decodeBTCommand(String command) {
     //mySerial.write("Set single led:");
     String str_nr = command.substring(2,5);
     int nr = decodeString(str_nr);
-    set_led(nr);
+    add_to_drawing(nr);
   }
   else if (command.startsWith("MD")) {
     //mySerial.write("Set single led:");
     String str_nr = command.substring(2,4);
     int nr = decodeString(str_nr);
-    currentMode = nr;
+    setCurrentMode(nr);
   }
   else if (command == "GT;") {
     mySerial.write("GT;");
@@ -108,6 +112,7 @@ int decodeString(String str) {
 // GT### = Get temperature
 // SS### = Set single LED [1-150]
 // MD##  = Set current mode
+// PT    = Print temperature
 
 
 

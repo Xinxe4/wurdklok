@@ -28,7 +28,14 @@ void set_brightness_value(int b) {
 }
 
 void apply_brightness(int b) {
-  analogWrite(PORT_STATUS_LED, b);
+  //analogWrite(PORT_STATUS_LED, b);
+  int b_i = b*15/255;
+  if(b_i < 0) {
+    b_i = 0;
+  } else if (b_i > 15) {
+    b_i = 15;
+  }
+  maxTransferDupl(0x0A, (15-b_i));
 }
 
 void set_manual_brightness(boolean b) {

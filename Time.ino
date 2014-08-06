@@ -3,20 +3,20 @@ int hh = 0;
 int mm = 0;
 int ss = 0;
 
-int get_hours() {
-  return hh;
+void set_RTC_time(int h, int m, int s) {
+    RTC.readTime();
+    RTC.setSeconds(s);
+    RTC.setMinutes(m);
+    RTC.setHours(h);
+    RTC.writeTime();  
 }
 
-int get_minutes() {
-  return mm;
-}
-
-void set_hours(int h) {
-  hh = h;
-}
-
-void set_minutes(int m) {
-  mm = m;
+void set_RTC_date(int D, int M, int Y) {
+    RTC.readTime();
+    RTC.setDays(D);
+    RTC.setMonths(M);
+    RTC.setYears(Y); // 2-digit or 4-digit years are supported
+    RTC.writeTime();  
 }
 
 void check_for_alarm() {

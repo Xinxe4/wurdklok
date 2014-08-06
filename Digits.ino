@@ -41,9 +41,10 @@ void show_current_time() {
 
   int ledBits[NR_LEDS];
   memfill(ledBits, NR_LEDS, 0);
-  
-  hours = get_hours();
-  minutes = get_minutes();
+
+  RTC.readTime();
+  hours = RTC.getHours();
+  minutes = RTC.getMinutes();
   int reducedHour;
   int roundMinute = (minutes / 5) * 5;
   

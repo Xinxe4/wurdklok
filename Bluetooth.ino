@@ -12,11 +12,12 @@ void decodeBTCommand(String command) {
   } 
   else if (command == "GA;") {
     mySerial.write("GA;");
+    RTC.readTime();
     String str;
-    str = String(get_hours());
+    str = String(RTC.getHours());
     mySerial.print(str);
     mySerial.write(";");
-    str = String(get_minutes());
+    str = String(RTC.getMinutes());
     mySerial.print(str);
     mySerial.write(";");
   } 
@@ -26,11 +27,22 @@ void decodeBTCommand(String command) {
     String mins = command.substring(4,6);
     int h = decodeString(hrs);
     int m = decodeString(mins);
-    set_hours(h);
-    set_minutes(m);
+    set_RTC_time(h, m, 0);
     show_current_time();
     //mySerial.print(h);mySerial.write(":");mySerial.print(m);mySerial.write(";");
-  } 
+  }
+  else if (command.startsWith("SD")) {
+    //mySerial.write("Set date:");
+    String day = command.substring(2,4);
+    String mon = command.substring(4,6);
+    String yea = command.substring(6,8);
+    int d = decodeString(day);
+    int m = decodeString(mon);
+    int y = decodeString(yea);
+    set_RTC_date(d, m, y);
+    show_current_time();
+    //mySerial.print(h);mySerial.write(":");mySerial.print(m);mySerial.write(";");
+  }  
   else if (command == "GM;") {
     mySerial.write("GM;");
     mySerial.print(get_manual_brightness());

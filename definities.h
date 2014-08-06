@@ -2,7 +2,7 @@
 #define LED_ROWS 8
 #define NR_LEDS (LED_COLS * LED_ROWS)
 #define INTERVAL 10
-#define LOOP_CLOCK (60000 / INTERVAL)
+#define LOOP_CLOCK (1000 / INTERVAL)
 #define LOOP_BRIGHTNESS (500 / INTERVAL)
 #define LOOP_TEMPERATURE (1000 / INTERVAL)
 #define LOOP_BLUETOOTH (20 / INTERVAL) //20 ms
@@ -12,6 +12,7 @@
 
 
 // Pinouts
+#define PORT_RTC_INT 2
 #define PORT_STATUS_LED 3
 #define PORT_MTX_DATA 11
 #define PORT_MTX_CLK 13
@@ -29,3 +30,12 @@ static const int CLOCK_MODE = 1;
 static const int DRAW_MODE = 2;
 static const int TEMPERATURE_MODE = 3;
 
+
+
+/*
+LED matrix connection colors: 
+red    = pin 8 (with external pull-up)
+yellow = pin 13
+green  = pin 11
+
+*/

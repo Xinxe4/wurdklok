@@ -4,10 +4,12 @@ Wurdklok
  */
 #include <SPI.h>
 #include <Wire.h>
+#include <DS1337.h>
 #include "Adafruit_MCP9808.h"
 #include <SoftwareSerial.h>
 SoftwareSerial mySerial = SoftwareSerial(PORT_BT_TX,PORT_BT_RX); // (RX, TX)
 Adafruit_MCP9808 tempsensor = Adafruit_MCP9808();
+DS1337 RTC = DS1337();
 
 String commandBT = "";           // a string to hold incoming bluetooth command
 boolean commandEnded = false;    // whether the command is completely received
@@ -18,6 +20,17 @@ int drawing[NR_LEDS];
 void setup() {
   mySerial.begin(9600);
   hardware_initialize();
+  RTC.start();
+  if(!RTC.time_is_set()) // set a time, if none set already...
+  {
+    RTC.setSeconds(0);
+    RTC.setMinutes(0);
+    RTC.setHours(0);
+    RTC.setDays(1);
+    RTC.setMonths(1);
+    RTC.setYears(2000);
+    RTC.writeTime();
+  }
   commandBT.reserve(64);
   show_current_time();
   if (!tempsensor.begin(0x1A)) {

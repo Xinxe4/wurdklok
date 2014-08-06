@@ -34,6 +34,7 @@
     <string name="off">Ut</string>
     <string name="auto">Auto</string>
     <string name="self">Sels</string>
+    <string name="refresh">Vernije</string>
     
     <!--  DeviceListActivity -->
     <string name="scanning">Sykje nei apparaten&#8230;</string>

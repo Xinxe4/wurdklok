@@ -2,4 +2,7 @@
 <resources>
     <dimen name="small_pad">8dp</dimen>
     <dimen name="pixel">1dp</dimen>
+    <dimen name="large_pad">24dp</dimen>
+    <dimen name="huge_pad">36dp</dimen>
+    <dimen name="huge_text">36sp</dimen>
 </resources>

@@ -8,13 +8,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.ToggleButton;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 
 public class MainFragment extends Fragment {
 
@@ -22,8 +22,8 @@ public class MainFragment extends Fragment {
     private TextView mMessage;
     private Button mSetTime;    
     private ToggleButton mAlarmToggle;
-    private ToggleButton mBrightnessToggle;
-    private SeekBar mBrightnessSlider;
+    public static ToggleButton mBrightnessToggle;
+    public static SeekBar mBrightnessSlider;
     private TextView mAlarmText;
     
     @Override
@@ -75,13 +75,13 @@ public class MainFragment extends Fragment {
 			public void onClick(View v) {
 				ToggleButton mTB = (ToggleButton) v;
 				if(mTB.isChecked()) {
-//					mBrightnessSlider.setEnabled(true);
-//        			mBrightnessToggle.setChecked(false);
-					BluetoothHC05.mSingleton.sendMessage("SM1;");
-				} else {
-//					mBrightnessSlider.setEnabled(false);
-//        			mBrightnessToggle.setChecked(true);
+  					//mBrightnessSlider.setEnabled(true);
+          			//mBrightnessToggle.setChecked(false);
 					BluetoothHC05.mSingleton.sendMessage("SM0;");
+				} else {
+  					//mBrightnessSlider.setEnabled(false);
+          			//mBrightnessToggle.setChecked(true);
+					BluetoothHC05.mSingleton.sendMessage("SM1;");
 				}
 			}
 		});

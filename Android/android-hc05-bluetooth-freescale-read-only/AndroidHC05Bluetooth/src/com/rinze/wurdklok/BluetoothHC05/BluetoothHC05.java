@@ -16,9 +16,7 @@
 
 package com.rinze.wurdklok.BluetoothHC05;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -37,17 +35,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.GridView;
-import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 /**
  * This is the main Activity that displays the current chat session.
@@ -59,6 +49,9 @@ public class BluetoothHC05 extends Activity {
 	public static int height, width;
 	public static BluetoothHC05 mSingleton;
 	
+	public static TabHost myTabs;
+	public static int TempC;
+
     // Debugging
 	protected static final String TAG = "BluetoothChat";
     protected static final boolean D = true;
@@ -120,18 +113,22 @@ public class BluetoothHC05 extends Activity {
         //initiating both tabs and set text to it.
         ActionBar.Tab MainTab = actionbar.newTab().setText("Main");
         ActionBar.Tab DrawingTab = actionbar.newTab().setText("Drawing");
+        ActionBar.Tab TemperatureTab = actionbar.newTab().setText("Temperature");
         
         //create the two fragments we want to use for display content
         Fragment MainFragment = new MainFragment();
         Fragment DrawingFragment = new DrawingFragment();
+        Fragment TemperatureFragment = new TemperatureFragment();
         
         //set the Tab listener. Now we can listen for clicks.
         MainTab.setTabListener(new MyTabsListener(MainFragment, getApplicationContext()));
         DrawingTab.setTabListener(new MyTabsListener(DrawingFragment,getApplicationContext()));
-
+        TemperatureTab.setTabListener(new MyTabsListener(TemperatureFragment,getApplicationContext()));
+        
         //add the two tabs to the actionbar
         actionbar.addTab(MainTab);
         actionbar.addTab(DrawingTab);
+        actionbar.addTab(TemperatureTab);
         
     	DisplayMetrics metrics = new DisplayMetrics();
     	getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -206,13 +203,15 @@ public class BluetoothHC05 extends Activity {
     	for (int i = 0; i < a.size(); i++) {
     		a.get(i).setEnabled(b);
     	}
-    	if(D) Log.e(TAG, "activateViews" + String.valueOf(b));
+    	if(D) Log.i(TAG, "activateViews" + String.valueOf(b));
     }
     
     private void updateSettings() {
+    	Log.i(TAG, "updateSettings");
     	activateViews(activeViews, true);
-    	sendMessage("GB;");
     	sendMessage("GM;");
+    	//sendMessage("GB;");
+    	//sendMessage("GA;");
     }
     
     @Override
@@ -305,16 +304,25 @@ public class BluetoothHC05 extends Activity {
 		    			if (cmdBuffer.get(0).contains("GM")) {
 		    				if (cmdBuffer.size() > 1) {
 		    					int man = Integer.parseInt(cmdBuffer.get(1).substring(0,1));
-								//mBrightnessSlider.setEnabled(man>0);
-								//mBrightnessToggle.setChecked(man<1);
+								MainFragment.mBrightnessSlider.setEnabled(man>0);
+								MainFragment.mBrightnessToggle.setChecked(man<1);
 								cmdBuffer.remove(0);
 								cmdBuffer.remove(1);
 								cmdBuffer.trimToSize();
+								sendMessage("GB;");
 		    				}
 						} else if (cmdBuffer.get(0).contains("GB")) {
 							if (cmdBuffer.size() > 1) {
 		    					int man = Integer.parseInt(cmdBuffer.get(1).substring(0));
-		    					//mBrightnessSlider.setProgress(man);
+		    					MainFragment.mBrightnessSlider.setProgress(man);
+								cmdBuffer.remove(0);
+								cmdBuffer.remove(1);
+								cmdBuffer.trimToSize();
+							}
+						} else if (cmdBuffer.get(0).contains("GT")) {
+							if (cmdBuffer.size() > 1) {
+		    					int T = Integer.parseInt(cmdBuffer.get(1).substring(0));
+		    					TemperatureFragment.setTemperature(T);
 								cmdBuffer.remove(0);
 								cmdBuffer.remove(1);
 								cmdBuffer.trimToSize();

@@ -28,6 +28,7 @@ void decodeBTCommand(String command) {
     int h = decodeString(hrs);
     int m = decodeString(mins);
     set_RTC_time(h, m, 0);
+    setCurrentMode(CLOCK_MODE);
     show_current_time();
     //mySerial.print(h);mySerial.write(":");mySerial.print(m);mySerial.write(";");
   }

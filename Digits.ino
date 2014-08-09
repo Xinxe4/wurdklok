@@ -72,20 +72,25 @@ void show_current_time() {
     compose(TSIEN_M, ledBits);
     compose(FOAR, ledBits);
     compose(HEALWEI, ledBits);
+    reducedHour++;
   } else if (minutes < 30) {
     compose(FIIF_M, ledBits);
     compose(FOAR, ledBits);
     compose(HEALWEI, ledBits);
+    reducedHour++;
   } else if (minutes < 35) {
     compose(HEALWEI, ledBits);
+    reducedHour++;
   } else if (minutes < 40) {
     compose(FIIF_M, ledBits);
     compose(OER, ledBits);
     compose(HEALWEI, ledBits);
+    reducedHour++;
   } else if (minutes < 45) {
     compose(TSIEN_M, ledBits);
     compose(OER, ledBits);
     compose(HEALWEI, ledBits);
+    reducedHour++;
   } else if (minutes < 50) {
     compose(KERTIER, ledBits);
     compose(FOAR, ledBits);

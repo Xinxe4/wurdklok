@@ -30,6 +30,18 @@ void hardware_initialize() {
      delay(100);
    }
    maxTransferDupl(0x08, 0x00);
+   
+  RTC.start();
+  if(!RTC.time_is_set()) // set a time, if none set already...
+  {
+    RTC.setSeconds(0);
+    RTC.setMinutes(0);
+    RTC.setHours(0);
+    RTC.setDays(1);
+    RTC.setMonths(1);
+    RTC.setYears(2000);
+    RTC.writeTime();
+  }
 }
 
 void printMatrix(const int ledBits[]) {

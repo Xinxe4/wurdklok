@@ -15,22 +15,11 @@ String commandBT = "";           // a string to hold incoming bluetooth command
 boolean commandEnded = false;    // whether the command is completely received
 static int currentMode;          // What mode the clock is in (clock, temperature, etc)
 
-int drawing[NR_LEDS];
+static int drawing[NR_LEDS];
 
 void setup() {
   mySerial.begin(9600);
   hardware_initialize();
-  RTC.start();
-  if(!RTC.time_is_set()) // set a time, if none set already...
-  {
-    RTC.setSeconds(0);
-    RTC.setMinutes(0);
-    RTC.setHours(0);
-    RTC.setDays(1);
-    RTC.setMonths(1);
-    RTC.setYears(2000);
-    RTC.writeTime();
-  }
   commandBT.reserve(64);
   show_current_time();
   if (!tempsensor.begin(0x1A)) {

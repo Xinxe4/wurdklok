@@ -22,8 +22,8 @@ const int TSIEN[] = { 76,77,78,79,80, -1 };
 const int ALVE[] = { 100,101,102,103, -1 };
 const int TOLVE[] = { 84,85,86,87,88, -1 };
 
-const int IENEN[] = { 78,79,80,81,82 -1 };
-const int TWAEN[] = { 95,96,97,98,99 -1 };
+const int IENEN[] = { 78,79,80,81,82, -1 };
+const int TWAEN[] = { 95,96,97,98,99, -1 };
 const int TRIJEN[] = { 60,61,62,63,64,65, -1 };
 const int FJOUWEREN[] = { 45,46,47,48,49,50,51,52,53 -1 };
 const int FIVEN[] = { 105,106,107,108,109, -1 };
@@ -38,22 +38,23 @@ const int TOLVEN[] = { 84,85,86,87,88,89, -1 };
 void show_current_time() {
   int hours;
   int minutes;
-
+  
   int ledBits[NR_LEDS];
   memfill(ledBits, NR_LEDS, 0);
 
-  RTC.readTime();
-  hours = RTC.getHours();
-  minutes = RTC.getMinutes();
+  get_RTC_time();
+  hours = hour();
+  minutes = minute();
+  
   int reducedHour;
   int roundMinute = (minutes / 5) * 5;
-  
+ 
   if (hours<=12) {
     reducedHour = hours;
   } else {
     reducedHour = hours - 12;
   }
-  
+ 
   compose(IT, ledBits);
   compose(IS, ledBits);
  
@@ -72,20 +73,25 @@ void show_current_time() {
     compose(TSIEN_M, ledBits);
     compose(FOAR, ledBits);
     compose(HEALWEI, ledBits);
+    reducedHour++;
   } else if (minutes < 30) {
     compose(FIIF_M, ledBits);
     compose(FOAR, ledBits);
     compose(HEALWEI, ledBits);
+    reducedHour++;
   } else if (minutes < 35) {
     compose(HEALWEI, ledBits);
+    reducedHour++;
   } else if (minutes < 40) {
     compose(FIIF_M, ledBits);
     compose(OER, ledBits);
     compose(HEALWEI, ledBits);
+    reducedHour++;
   } else if (minutes < 45) {
     compose(TSIEN_M, ledBits);
     compose(OER, ledBits);
     compose(HEALWEI, ledBits);
+    reducedHour++;
   } else if (minutes < 50) {
     compose(KERTIER, ledBits);
     compose(FOAR, ledBits);
@@ -99,8 +105,8 @@ void show_current_time() {
     compose(FOAR, ledBits);
     reducedHour++;
   }
-  
-  if (roundMinute == 0) { 
+ 
+  if (roundMinute == 0) {
     switch (reducedHour) {
       case 0: compose(TOLVE, ledBits);
           break;
@@ -125,10 +131,10 @@ void show_current_time() {
       case 10: compose(TSIEN, ledBits);
           break;
       case 11: compose(ALVE, ledBits);
-          break;      
-      case 12: compose(TOLVE, ledBits);
           break;     
-    }   
+      case 12: compose(TOLVE, ledBits);
+          break;    
+    }  
   } else {
     switch (reducedHour) {
       case 0: compose(TOLVEN, ledBits);
@@ -154,12 +160,12 @@ void show_current_time() {
       case 10: compose(TSIENEN, ledBits);
           break;
       case 11: compose(ALVEN, ledBits);
-          break;      
-      case 12: compose(TOLVEN, ledBits);
           break;     
-    }    
+      case 12: compose(TOLVEN, ledBits);
+          break;    
+    }   
   }
-  
+ 
   printMatrix(ledBits);
 }
 

@@ -35,9 +35,11 @@ void hardware_initialize() {
 void printMatrix(const int ledBits[]) {
   uint8_t arr1 = 0;
   uint8_t arr2 = 0;
+  uint8_t arr3 = 0;
   for (uint8_t r=0; r<LED_ROWS; r++) {
     arr1 = 0;
     arr2 = 0;
+    arr3 = 0;
     for (uint8_t c=0; c<LED_COLS; c++) {
       if (ledBits[c+(r*LED_COLS)]==1) {
         if (c<7) {
@@ -46,8 +48,17 @@ void printMatrix(const int ledBits[]) {
           bitSet(arr1,c-7);
         }
       }
+      if (r<5) {
+        if (ledBits[c+(((r/2)+8)*LED_COLS)]==1) {
+          if(r%2) {
+            bitSet(arr3,c+1);
+          } else {
+            bitSet(arr3,c-7);
+          }
+        }
+      }
     }
-    maxTransfer2(r+1, arr1, r+1, arr2);
+    maxTransfer3(r+1, arr1, r+1, arr2, r+1, arr3);
   }
 }
 
@@ -58,9 +69,13 @@ void printMatrix(const int ledBits[]) {
 * @param value Value to store in the register
 */
 void maxTransferDupl(uint8_t address, uint8_t value) {
-// Expects 2 cascaded chips, send same commands to both
+// Expects 3 cascaded chips, send same commands to all
 // Ensure LOAD/CS is LOW
 digitalWrite(PORT_MTX_LOAD, LOW);
+// Send the register address
+SPI.transfer(address);
+// Send the value
+SPI.transfer(value);
 // Send the register address
 SPI.transfer(address);
 // Send the value
@@ -73,10 +88,14 @@ SPI.transfer(value);
 digitalWrite(PORT_MTX_LOAD, HIGH);
 }
 
-void maxTransfer2(uint8_t address1, uint8_t value1, uint8_t address2, uint8_t value2) {
-// Expects 2 cascaded chips, sends different commands to both
+void maxTransfer3(uint8_t address1, uint8_t value1, uint8_t address2, uint8_t value2, uint8_t address3, uint8_t value3) {
+// Expects 3 cascaded chips, sends different commands to both
 // Ensure LOAD/CS is LOW
 digitalWrite(PORT_MTX_LOAD, LOW);
+// Send the register address
+SPI.transfer(address3);
+// Send the value
+SPI.transfer(value3);
 // Send the register address
 SPI.transfer(address2);
 // Send the value

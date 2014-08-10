@@ -12,13 +12,13 @@
 
 
 // Pinouts
-#define PORT_RTC_INT 2
 #define PORT_STATUS_LED 3
 #define PORT_MTX_DATA 11
 #define PORT_MTX_CLK 13
 #define PORT_MTX_LOAD 8
 #define PORT_BT_RX 7
 #define PORT_BT_TX 6
+#define PORT_ALARM 4
 
 #define PORT_LIGHT_SENSOR A0
 

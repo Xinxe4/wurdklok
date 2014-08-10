@@ -3,24 +3,45 @@ int hh = 0;
 int mm = 0;
 int ss = 0;
 
-void set_RTC_time(int h, int m, int s) {
-    RTC.readTime();
-    RTC.setSeconds(s);
-    RTC.setMinutes(m);
-    RTC.setHours(h);
-    RTC.writeTime();  
+void set_RTC_time(int y, int m, int d, int hh, int mm, int ss) {
+  tmElements_t tmSet;
+  tmSet.Year = y - 1970;
+  tmSet.Month = m;
+  tmSet.Day = d;
+  tmSet.Hour = hh;
+  tmSet.Minute = mm;
+  tmSet.Second = ss;
+  RTC.set(makeTime(tmSet), CLOCK_ADDRESS); // set the clock
 }
 
-void set_RTC_date(int D, int M, int Y) {
-    RTC.readTime();
-    RTC.setDays(D);
-    RTC.setMonths(M);
-    RTC.setYears(Y); // 2-digit or 4-digit years are supported
-    RTC.writeTime();  
+void set_RTC_time(int hh, int mm, int ss) {
+  tmElements_t tmSet;
+  tmSet.Hour = hh;
+  tmSet.Minute = mm;
+  tmSet.Second = ss;
+  RTC.set(makeTime(tmSet), CLOCK_ADDRESS); // set the clock
+}
+
+void set_RTC_date(int d, int m, int y) {
+  tmElements_t tmSet;
+  tmSet.Year = y - 1970;
+  tmSet.Month = m;
+  tmSet.Day = d;
+  RTC.set(makeTime(tmSet), CLOCK_ADDRESS); // set the clock
+}
+
+void get_RTC_time() {
+  setTime( RTC.get(CLOCK_ADDRESS) );
+}
+
+void set_RTC_alarm(int h, int m) {
+  setTime( RTC.get(ALARM1_ADDRESS) );
 }
 
 void check_for_alarm() {
   
 }
+
+
 
 

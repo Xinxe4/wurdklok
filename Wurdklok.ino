@@ -2,36 +2,37 @@
 /* 
 Wurdklok
  */
+#include <SerialCommand.h>
 #include <SPI.h>
 #include <Wire.h>
-#include <DS1337.h>
+#include <DS1337RTC.h>
+#include <Time.h>
 #include "Adafruit_MCP9808.h"
 #include <SoftwareSerial.h>
 SoftwareSerial mySerial = SoftwareSerial(PORT_BT_TX,PORT_BT_RX); // (RX, TX)
 Adafruit_MCP9808 tempsensor = Adafruit_MCP9808();
-DS1337 RTC = DS1337();
+SerialCommand sCmd;     // SerialCommand object
 
-String commandBT = "";           // a string to hold incoming bluetooth command
+//char* commandBT;                // a string to hold incoming bluetooth command
+//commandBT = (char*)malloc(64 * sizeof(char));
+//commandBT = "";
 boolean commandEnded = false;    // whether the command is completely received
 static int currentMode;          // What mode the clock is in (clock, temperature, etc)
 
-int drawing[NR_LEDS];
+static int drawing[NR_LEDS];
 
 void setup() {
   mySerial.begin(9600);
   hardware_initialize();
-  RTC.start();
-  if(!RTC.time_is_set()) // set a time, if none set already...
-  {
-    RTC.setSeconds(0);
-    RTC.setMinutes(0);
-    RTC.setHours(0);
-    RTC.setDays(1);
-    RTC.setMonths(1);
-    RTC.setYears(2000);
-    RTC.writeTime();
-  }
-  commandBT.reserve(64);
+  digitalWrite(PORT_STATUS_LED, 1);
+  sCmd.addCommand("ON",    LED_on);          // Turns LED on
+  sCmd.addCommand("OFF",   LED_off);         // Turns LED off
+  sCmd.addCommand("GT",    BT_GT); 
+  sCmd.addCommand("GB",    BT_GB); 
+  sCmd.addCommand("GM",    BT_GM);
+  sCmd.addCommand("P",     processCommand);  // Converts two arguments to integers and echos them back
+  sCmd.setDefaultHandler(unrecognized);      // Handler for command that isn't matched
+  if (!RTC.time_is_set()) {set_RTC_time(2014,8,10,13,20,0);}
   show_current_time();
   if (!tempsensor.begin(0x1A)) {
     mySerial.println("Couldn't find MCP9808!");
@@ -65,22 +66,7 @@ void loop() {
   }
   
   if (loopCounter % LOOP_BLUETOOTH == 0) {
-    while (mySerial.available()) {
-      // get the new byte:
-      char inChar = (char)mySerial.read(); 
-      // add it to the inputString:
-      commandBT += inChar;
-      // if the incoming character is a newline, set a flag
-      // so the main loop can do something about it:
-      if (inChar == ';') {
-        commandEnded = true;
-      } 
-    }
-    if (commandEnded) {
-      decodeBTCommand(commandBT); 
-      commandBT = "";
-      commandEnded = false;
-    }
+        sCmd.readSerial(mySerial);  
   }
   
   delay(INTERVAL);
@@ -93,3 +79,4 @@ void setCurrentMode(int mode) {
     clear_matrix();
   }
 }
+  

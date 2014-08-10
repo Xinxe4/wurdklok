@@ -27,7 +27,7 @@ public class TemperatureFragment extends Fragment {
 
     	mTemp = (TextView) v.findViewById(R.id.text_temp);
 		
-    	BluetoothHC05.mSingleton.sendMessage("MD03;");
+    	BluetoothHC05.mSingleton.sendMessage("P MD 3;");
     	
     	Button mBtnRefresh = (Button) v.findViewById(R.id.button_refresh);
     	mBtnRefresh.setOnClickListener(new OnClickListener() {

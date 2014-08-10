@@ -149,8 +149,6 @@ void processCommand() {
   arg = sCmd.next();
   if (arg != NULL) {
     strcpy(cmd , arg);
-    mySerial.print(cmd);
-    mySerial.print(";END;");
   }
 
   arg = sCmd.next();
@@ -185,6 +183,7 @@ void processCommand() {
   } else if (strcmp(cmd, "SS") == 0) {
       add_to_drawing(a);
   }
+  mySerial.write("END;");
 }
 
 void BT_GT() {
@@ -208,6 +207,12 @@ void BT_GB() {
 void BT_GM() {
   mySerial.write("GM;");
   mySerial.print(get_manual_brightness());
+  mySerial.write(";");
+} 
+
+void BT_GA() {
+  mySerial.write("GA;");
+  mySerial.print("0000");
   mySerial.write(";");
 } 
 

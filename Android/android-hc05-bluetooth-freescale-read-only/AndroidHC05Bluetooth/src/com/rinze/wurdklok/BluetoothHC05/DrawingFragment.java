@@ -49,16 +49,14 @@ public class DrawingFragment extends Fragment {
     	GridView mMatrix = (GridView) v.findViewById(R.id.gridView1);
 		
     	ArrayAdapter<String> adapter = new ArrayAdapter<String>(v.getContext(),R.layout.grid_item_label, numbers);
-    	BluetoothHC05.mSingleton.sendMessage("MD02;");
+    	BluetoothHC05.mSingleton.sendMessage("P MD 2;");
 		
 		mMatrix.setAdapter(adapter);
 		
 		mMatrix.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v,int position, long id) {
-			   DecimalFormat d = new DecimalFormat("000");
-           	   String msg = "SS" + d.format(position) + ";";
+           	   String msg = "P SS " + Integer.toString(position) + ";";
            	   BluetoothHC05.mSingleton.sendMessage(msg);
-           	if(BluetoothHC05.D) Log.i(BluetoothHC05.TAG, "Sent: " + msg);
 			}
 		});	
 		

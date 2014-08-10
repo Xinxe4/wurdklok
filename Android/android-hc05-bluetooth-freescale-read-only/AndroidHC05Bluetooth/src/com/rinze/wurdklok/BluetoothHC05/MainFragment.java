@@ -49,10 +49,8 @@ public class MainFragment extends Fragment {
                 Calendar c = Calendar.getInstance();
                 int hr = c.get(Calendar.HOUR_OF_DAY);
                 int mi = c.get(Calendar.MINUTE);
-                DecimalFormat d = new DecimalFormat("00");
-            	String msg = "ST" + d.format(hr) + d.format(mi) + ";";
+            	String msg = "P ST " + Integer.toString(hr) + " " + Integer.toString(mi) + ";";
             	BluetoothHC05.mSingleton.sendMessage(msg);
-                if(BluetoothHC05.D) Log.i(BluetoothHC05.TAG, "Sent:" + msg);
             }
         });
         
@@ -61,7 +59,7 @@ public class MainFragment extends Fragment {
         mBrightnessSlider = (SeekBar) v.findViewById(R.id.brightness_slider);
         mBrightnessSlider.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			public void onStopTrackingTouch(SeekBar seekBar) {
-				String str = "SB" + String.format("%03d", seekBar.getProgress()) + ";";
+				String str = "P SB " + Integer.toString(seekBar.getProgress()) + ";";
 				BluetoothHC05.mSingleton.sendMessage(str);
 			}
 			public void onStartTrackingTouch(SeekBar seekBar) {	
@@ -77,11 +75,13 @@ public class MainFragment extends Fragment {
 				if(mTB.isChecked()) {
   					//mBrightnessSlider.setEnabled(true);
           			//mBrightnessToggle.setChecked(false);
-					BluetoothHC05.mSingleton.sendMessage("SM0;");
+					BluetoothHC05.mSingleton.sendMessage("P SM 0;");
+					BluetoothHC05.mSingleton.sendMessage("GM;");
 				} else {
   					//mBrightnessSlider.setEnabled(false);
           			//mBrightnessToggle.setChecked(true);
-					BluetoothHC05.mSingleton.sendMessage("SM1;");
+					BluetoothHC05.mSingleton.sendMessage("P SM 1;");
+					BluetoothHC05.mSingleton.sendMessage("GM;");
 				}
 			}
 		});

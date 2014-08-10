@@ -28,7 +28,8 @@ void setup() {
   sCmd.addCommand("ON",    LED_on);          // Turns LED on
   sCmd.addCommand("OFF",   LED_off);         // Turns LED off
   sCmd.addCommand("GT",    BT_GT); 
-  sCmd.addCommand("GB",    BT_GB); 
+  sCmd.addCommand("GB",    BT_GB);
+  sCmd.addCommand("GA",    BT_GA);
   sCmd.addCommand("GM",    BT_GM);
   sCmd.addCommand("P",     processCommand);  // Converts two arguments to integers and echos them back
   sCmd.setDefaultHandler(unrecognized);      // Handler for command that isn't matched
@@ -77,6 +78,8 @@ void setCurrentMode(int mode) {
   currentMode = mode;
   if (mode == DRAW_MODE) {
     clear_matrix();
+  } else if (mode == CLOCK_MODE) {
+    show_current_time();
   }
 }
   

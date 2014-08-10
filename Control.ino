@@ -48,7 +48,7 @@ void printMatrix(const int ledBits[]) {
           bitSet(arr1,c-7);
         }
       }
-      if (r<5) {
+      if (r<4) {
         if (ledBits[c+(((r/2)+8)*LED_COLS)]==1) {
           if(r%2) {
             bitSet(arr3,c+1);
@@ -57,6 +57,9 @@ void printMatrix(const int ledBits[]) {
           }
         }
       }
+      if (r==4) {
+        //DOTS
+      }  
     }
     maxTransfer3(r+1, arr1, r+1, arr2, r+1, arr3);
   }

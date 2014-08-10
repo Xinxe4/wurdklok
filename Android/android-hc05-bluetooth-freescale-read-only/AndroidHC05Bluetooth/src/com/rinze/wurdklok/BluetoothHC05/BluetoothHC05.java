@@ -261,6 +261,7 @@ public class BluetoothHC05 extends Activity {
             // Get the message bytes and tell the BluetoothChatService to write
             byte[] send = message.getBytes();
             mChatService.write(send);
+           	if(BluetoothHC05.D) Log.i(BluetoothHC05.TAG, "Sent: " + message);
         }
     }
     
@@ -302,29 +303,41 @@ public class BluetoothHC05 extends Activity {
 	        		if (cmdBuffer.size() > 0) {
 	        			if(D){Log.i(TAG, "Decode: " + cmdBuffer.get(0));}
 		    			if (cmdBuffer.get(0).contains("GM")) {
-		    				if (cmdBuffer.size() > 1) {
-		    					int man = Integer.parseInt(cmdBuffer.get(1).substring(0,1));
-								MainFragment.mBrightnessSlider.setEnabled(man>0);
-								MainFragment.mBrightnessToggle.setChecked(man<1);
-								cmdBuffer.remove(0);
+		    				if (cmdBuffer.size() > 1 && cmdBuffer.get(1)!="") {
+		    					try {
+			    					int man = Integer.parseInt(cmdBuffer.get(1).substring(0,1));
+									MainFragment.mBrightnessSlider.setEnabled(man>0);
+									MainFragment.mBrightnessToggle.setChecked(man<1);
+								} catch (Exception e) {
+									if(D){Log.e(TAG, "Failed to parse int");}
+								}
 								cmdBuffer.remove(1);
+								cmdBuffer.remove(0);
 								cmdBuffer.trimToSize();
 								sendMessage("GB;");
 		    				}
 						} else if (cmdBuffer.get(0).contains("GB")) {
-							if (cmdBuffer.size() > 1) {
-		    					int man = Integer.parseInt(cmdBuffer.get(1).substring(0));
-		    					MainFragment.mBrightnessSlider.setProgress(man);
-								cmdBuffer.remove(0);
+							if (cmdBuffer.size() > 1 && cmdBuffer.get(1)!="") {
+		    					try {
+									int man = Integer.parseInt(cmdBuffer.get(1).substring(0));
+									MainFragment.mBrightnessSlider.setProgress(man);
+								} catch (Exception e) {
+									if(D){Log.e(TAG, "Failed to parse int");}
+								}
 								cmdBuffer.remove(1);
+								cmdBuffer.remove(0);
 								cmdBuffer.trimToSize();
 							}
 						} else if (cmdBuffer.get(0).contains("GT")) {
-							if (cmdBuffer.size() > 1) {
-		    					int T = Integer.parseInt(cmdBuffer.get(1).substring(0));
-		    					TemperatureFragment.setTemperature(T);
-								cmdBuffer.remove(0);
+							if (cmdBuffer.size() > 1 && cmdBuffer.get(1)!="") {
+								try {
+									int T = Integer.parseInt(cmdBuffer.get(1).substring(0));
+									TemperatureFragment.setTemperature(T);
+								} catch (Exception e) {
+									if(D){Log.e(TAG, "Failed to parse int");}
+								}
 								cmdBuffer.remove(1);
+								cmdBuffer.remove(0);
 								cmdBuffer.trimToSize();
 							}
 						} else if (cmdBuffer.get(0).contains("END")) {

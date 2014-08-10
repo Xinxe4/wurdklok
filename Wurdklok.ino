@@ -34,7 +34,7 @@ void setup() {
   sCmd.addCommand("P",     processCommand);  // Converts two arguments to integers and echos them back
   sCmd.setDefaultHandler(unrecognized);      // Handler for command that isn't matched
   if (!RTC.time_is_set()) {set_RTC_time(2014,8,10,13,20,0);}
-  show_current_time();
+show_current_time();
   if (!tempsensor.begin(0x1A)) {
     mySerial.println("Couldn't find MCP9808!");
   } else {

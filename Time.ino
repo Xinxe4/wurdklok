@@ -1,8 +1,4 @@
 
-int hh = 0;
-int mm = 0;
-int ss = 0;
-
 void set_RTC_time(int y, int m, int d, int hh, int mm, int ss) {
   tmElements_t tmSet;
   tmSet.Year = y - 1970;

@@ -78,19 +78,19 @@ void print_char(int ledBits[], const int xpos, const int ypos, const char c,
   byte data[height];  
   character_definition(data, c, font, height); 
     
-  int x = 0;
-  int y = 0;
+  byte x = 0;
+  byte y = 0;
   
-  for (int i = 0; i < height; i++) {
-    for (int k = 0; k < width; k++) {
+  for (byte i = 0; i < height; i++) {
+    for (byte k = 0; k < width; k++) {
     
       if ((data[i] & (1 << k)) != 0) {
         
-        int effectiveX = xpos + x;
-        int effectiveY = ypos + y;
+        byte effectiveX = xpos + x;
+        byte effectiveY = ypos + y;
         
         if ((effectiveX < LED_COLS) && (effectiveY < LED_ROWS) && (effectiveX >= 0) && (effectiveY >= 0)) { 
-          int ledIndex = (effectiveY) * LED_COLS + (effectiveX);
+          byte ledIndex = (effectiveY) * LED_COLS + (effectiveX);
           ledBits[ledIndex] = 1;
         }
       }

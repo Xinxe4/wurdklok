@@ -36,12 +36,12 @@ void setup() {
   if (!RTC.time_is_set()) {set_RTC_time(2014,8,10,13,20,0);}
 show_current_time();
   if (!tempsensor.begin(0x1A)) {
-    mySerial.println("No MCP9808!");
+    mySerial.println(F("No MCP9808!"));
   } else {
     tempsensor.write8( MCP9808_REG_RESOLUTION , MCP9808_RESOLUTION_00625);
   }
   currentMode = CLOCK_MODE;
-  mySerial.print("Init;");
+  mySerial.print(F("Init;"));
 }
 
 void loop() {

@@ -82,6 +82,8 @@ void setCurrentMode(int mode) {
     clear_matrix();
   } else if (mode == CLOCK_MODE) {
     show_current_time();
+  } else if (currentMode == TEMPERATURE_MODE) {
+    print_temperature();
   }
 }
 

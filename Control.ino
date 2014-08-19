@@ -32,11 +32,11 @@ void hardware_initialize() {
    maxTransferDupl(0x08, 0x00);
 }
 
-void printMatrix(const int ledBits[]) {
+void printMatrix(const boolean ledBits[]) {
   uint8_t arr1 = 0;
   uint8_t arr2 = 0;
   uint8_t arr3 = 0;
-  for (uint8_t r=0; r<LED_ROWS; r++) {
+  for (uint8_t r=0; r<8; r++) {
     arr1 = 0;
     arr2 = 0;
     arr3 = 0;
@@ -51,19 +51,22 @@ void printMatrix(const int ledBits[]) {
       if (r<4) {
         if (ledBits[c+(((r/2)+8)*LED_COLS)]==1) {
           if(r%2) {
-            bitSet(arr3,c+1);
-          } else {
             bitSet(arr3,c-7);
+          } else {
+            bitSet(arr3,c+1);
           }
         }
       }
-      if (r==5) { //dots
-        int m = minute();
-        int mr=(m%5);
-        for (unsigned char i = 0; i<4; i++){
-          if (mr>i) {
-            bitSet(arr3,i+4);
-          }  
+      
+      if (currentMode == CLOCK_MODE) {
+        if (r==5) { //dots
+          int m = minute();
+          int mr=(m%5);
+          for (unsigned char i = 0; i<4; i++){
+            if (mr>i) {
+              bitSet(arr3,i+4);
+            }  
+          }
         }
       }  
     }

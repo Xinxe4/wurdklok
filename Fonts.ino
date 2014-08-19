@@ -51,7 +51,7 @@ void character_definition(byte data[], const char c, const int font[], const int
               (starts at 0)
   @param (in) c the character to display
 */  
-void print_char_4x5(int ledBits[], const int xpos, const int ypos, const char c) {
+void print_char_4x5(boolean ledBits[], const int xpos, const int ypos, const char c) {
   print_char(ledBits, xpos, ypos, c, CHAR_SET_4x5, 4, 5);
 }
 
@@ -72,7 +72,7 @@ void print_char_4x5(int ledBits[], const int xpos, const int ypos, const char c)
   @param (in) height height of the font in pixel
 */  
 
-void print_char(int ledBits[], const int xpos, const int ypos, const char c, 
+void print_char(boolean ledBits[], const int xpos, const int ypos, const char c, 
     const int font[], const int width, const int height) {
 
   byte data[height];  

@@ -19,7 +19,7 @@ SerialCommand sCmd;     // SerialCommand object
 boolean commandEnded = false;    // whether the command is completely received
 static int currentMode;          // What mode the clock is in (clock, temperature, etc)
 
-static int drawing[NR_LEDS];
+static boolean drawing[NR_LEDS];
 
 void setup() {
   mySerial.begin(9600);

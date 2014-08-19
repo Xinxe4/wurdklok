@@ -1,5 +1,5 @@
 #define LED_COLS 15
-#define LED_ROWS 8
+#define LED_ROWS 10
 #define NR_LEDS (LED_COLS * LED_ROWS)
 #define INTERVAL 10
 #define LOOP_CLOCK (5000 / INTERVAL)

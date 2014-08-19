@@ -39,7 +39,7 @@ void show_current_time() {
   int hours;
   int minutes;
   
-  int ledBits[NR_LEDS];
+  boolean ledBits[NR_LEDS];
   memfill(ledBits, NR_LEDS, 0);
 
   get_RTC_time();
@@ -171,7 +171,7 @@ void show_current_time() {
 
 void set_led(int nr) {
   if(nr > NR_LEDS) { nr = NR_LEDS;}
-  int ledBits[NR_LEDS];
+  boolean ledBits[NR_LEDS];
   memfill(ledBits, NR_LEDS, 0);
   const int constNr[] = { nr, -1};
   compose(constNr, ledBits);
@@ -188,7 +188,7 @@ void add_to_drawing(int led) {
   printMatrix(drawing);
 }
 
-static void compose(const int arrayToAdd[], int ledBits[]) {
+static void compose(const int arrayToAdd[], boolean ledBits[]) {
   int pos;
   int i = 0;
   while ((pos = arrayToAdd[i++]) != -1) {
@@ -196,7 +196,7 @@ static void compose(const int arrayToAdd[], int ledBits[]) {
   }
 }
 
-static void compose2(int ledToAdd, int ledBits[]) {
+static void compose2(int ledToAdd, boolean ledBits[]) {
    ledBits[ledToAdd] = 1;
 }
 
@@ -204,7 +204,7 @@ void print_temperature() {
   char tc[3] = {0};
   get_temperature_char( tc );
   
-  int ledBits[NR_LEDS];
+  boolean ledBits[NR_LEDS];
   memfill(ledBits, NR_LEDS, 0);
   
   for (int i=0; i<3; i++) {
@@ -231,7 +231,7 @@ Use this function to perform this.
 @param length the length of the array
 @param value the value to fill array with
 */
-void memfill(int array[], const int length, const int value) {
+void memfill(boolean array[], const int length, const int value) {
   for (int i = 0; i < length; i++) {
     array[i] = value;
   }

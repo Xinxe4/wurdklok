@@ -57,8 +57,14 @@ void printMatrix(const int ledBits[]) {
           }
         }
       }
-      if (r==4) {
-        //DOTS
+      if (r==4) { //dots
+        int m = minute();
+        int mr=(m%5);
+        for (unsigned char i = 0; i<4; i++){
+          if (mr>i) {
+            bitSet(arr3,i+1);
+          }  
+        }
       }  
     }
     maxTransfer3(r+1, arr1, r+1, arr2, r+1, arr3);

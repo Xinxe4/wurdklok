@@ -179,7 +179,7 @@ void set_led(int nr) {
 }
 
 void clear_matrix() {
-  memfill(drawing, 150, 0);
+  memfill(drawing, NR_LEDS, 0);
   printMatrix(drawing);
 }
 

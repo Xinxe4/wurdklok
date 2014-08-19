@@ -201,29 +201,21 @@ static void compose2(int ledToAdd, int ledBits[]) {
 }
 
 void print_temperature() {
-  float T = get_temperature();
-  T = T * 10;
-  int Ti = (int)T;
-  String Ts = String(Ti);
-  char Tc[Ts.length()+1];
-  Ts.toCharArray(Tc,Ts.length()+1);
+  char tc[3] = {0};
+  get_temperature_char( tc );
   
   int ledBits[NR_LEDS];
   memfill(ledBits, NR_LEDS, 0);
   
-  for (int i=0; i<Ts.length(); i++) {
-    if (i<Ts.length()-1) {
-      print_char_4x5(ledBits, i*5, 0, Tc[i]);
+  for (int i=0; i<3; i++) {
+    if (i<2) {
+      print_char_4x5(ledBits, i*5, 0, tc[i]);
     } else {
-      print_char_4x5(ledBits, (i*5)+1, 0, Tc[i]);
+      print_char_4x5(ledBits, (i*5)+1, 0, tc[i]);
     }
   }
 
-  if (Ts.length() == 2) {
-    compose2(79,ledBits);
-  } else if (Ts.length() == 3) {
-    compose2(84,ledBits);
-  }
+  compose2(84,ledBits);
   
   printMatrix(ledBits);
 }

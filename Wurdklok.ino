@@ -36,12 +36,12 @@ void setup() {
   if (!RTC.time_is_set()) {set_RTC_time(2014,8,10,13,20,0);}
   show_current_time();
   if (!tempsensor.begin(0x1A)) {
-    mySerial.println("Couldn't find MCP9808!");
+    mySerial.println("No MCP9808!");
   } else {
     tempsensor.write8( MCP9808_REG_RESOLUTION , MCP9808_RESOLUTION_00625);
   }
   currentMode = CLOCK_MODE;
-  mySerial.print("Initiated;");
+  mySerial.print("Init;");
 }
 
 void loop() {
@@ -60,6 +60,8 @@ void loop() {
     adjust_brightness();
   }
   if (loopCounter % LOOP_TEMPERATURE == 0) {
+    mySerial.print("FR;");
+    mySerial.print(freeRam()); sendLimChar();
     read_temperature();
     if (currentMode == TEMPERATURE_MODE) {
       print_temperature();
@@ -81,5 +83,11 @@ void setCurrentMode(int mode) {
   } else if (mode == CLOCK_MODE) {
     show_current_time();
   }
+}
+
+int freeRam() {
+  extern int __heap_start, *__brkval;
+  int v;
+  return (int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
 }
   

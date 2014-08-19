@@ -183,37 +183,36 @@ void processCommand() {
   } else if (strcmp(cmd, "SS") == 0) {
       add_to_drawing(a);
   }
-  mySerial.write("END;");
+  mySerial.print(F("END;"));
 }
 
 void BT_GT() {
   mySerial.write("GT;");
-  float tf = get_temperature();
-  tf = tf * 10;
-  int ti = (int)tf;
-  char * str;
-  str = (char*)malloc(4 * sizeof(char));
-  itoa(ti, str, 10);
-  mySerial.print(str);
-  mySerial.write(";");
+  char tc[3] = {0};
+  get_temperature_char( tc );
+  mySerial.print(tc);
+  sendLimChar();
 }
 
 void BT_GB() {
-  mySerial.write("GB;");   
+  mySerial.print("GB;");   
   mySerial.print(get_brightness_value());   
-  mySerial.write(";");
+  sendLimChar();
 } 
 
 void BT_GM() {
-  mySerial.write("GM;");
+  mySerial.print("GM;");
   mySerial.print(get_manual_brightness());
-  mySerial.write(";");
+  sendLimChar();
 } 
 
 void BT_GA() {
-  mySerial.write("GA;");
+  mySerial.print("GA;");
   mySerial.print("0000");
-  mySerial.write(";");
+  sendLimChar();
 } 
 
+void sendLimChar() {
+  mySerial.print(";");
+}
 

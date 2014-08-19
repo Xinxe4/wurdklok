@@ -1,10 +1,10 @@
-float temp = 0.0;
-float temp_min = 0.0;
-float temp_max = 0.0;
+int temp = 0;
+int temp_min = 0;
+int temp_max = 0;
 boolean temp_init = false;
 
 void read_temperature() {
-  temp = tempsensor.readTempC();
+  temp = tempsensor.readTempC_int();
   
   // Set min-max temperatures
   if (temp > temp_max) { 
@@ -22,17 +22,20 @@ void read_temperature() {
   temp_init = true;
 }
 
-float get_temperature() {
+int get_temperature() {
   return temp;
 }
 
-float get_temperature_min() {
+int get_temperature_min() {
   return temp_min;
 }
 
-float get_temperature_max() {
+int get_temperature_max() {
   return temp_max;
 }
 
-
+void get_temperature_char(char * tc) {
+  int ti = get_temperature();
+  itoa(ti, tc, 10);
+}
 

@@ -35,6 +35,7 @@
     <string name="auto">Auto</string>
     <string name="self">Sels</string>
     <string name="refresh">Vernije</string>
+    <string name="set_alarm">Sette</string>
     
     <!--  DeviceListActivity -->
     <string name="scanning">Sykje nei apparaten&#8230;</string>

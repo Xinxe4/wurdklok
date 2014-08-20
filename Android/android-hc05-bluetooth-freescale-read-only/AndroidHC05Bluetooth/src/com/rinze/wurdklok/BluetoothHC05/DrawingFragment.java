@@ -50,7 +50,8 @@ public class DrawingFragment extends Fragment {
 		
     	ArrayAdapter<String> adapter = new ArrayAdapter<String>(v.getContext(),R.layout.grid_item_label, numbers);
     	BluetoothHC05.mSingleton.sendMessage("P MD 2;");
-		
+    	BluetoothHC05.mSingleton.sendMessage("P MD 2;");
+    	
 		mMatrix.setAdapter(adapter);
 		
 		mMatrix.setOnItemClickListener(new OnItemClickListener() {

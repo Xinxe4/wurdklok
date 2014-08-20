@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -289,6 +290,7 @@ public class BluetoothHC05 extends Activity {
         	
         	if (limCharFound) { // At least 1 complete command received
     			if(D){Log.i(TAG, message);}
+    			MainFragment.mReceivedMsg.setText(message);
         		while (message.contains(";")) {
         			String cmd = message.substring(0, message.indexOf(";"));
         			if (message.indexOf(";") != message.length()) {
@@ -428,6 +430,11 @@ public class BluetoothHC05 extends Activity {
             }
         }
     }
+    
+	public void showTimePickerDialog(View v) {
+	    DialogFragment newFragment = new TimePickerFragment();
+	    newFragment.show(getFragmentManager(), "timePicker");
+	}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

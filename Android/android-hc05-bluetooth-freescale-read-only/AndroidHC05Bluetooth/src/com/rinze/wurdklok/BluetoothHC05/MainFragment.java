@@ -1,8 +1,8 @@
 package com.rinze.wurdklok.BluetoothHC05;
 
-import java.text.DecimalFormat;
 import java.util.Calendar;
 
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,11 +20,13 @@ public class MainFragment extends Fragment {
 
     private Button mSendButtonText;
     private TextView mMessage;
-    private Button mSetTime;    
+    private Button mSetTime;   
+    private Button mSetAlarm;
     private ToggleButton mAlarmToggle;
     public static ToggleButton mBrightnessToggle;
     public static SeekBar mBrightnessSlider;
     private TextView mAlarmText;
+    public static TextView mReceivedMsg;
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -32,6 +34,7 @@ public class MainFragment extends Fragment {
         View v = inflater.inflate(R.layout.mainfragment, container, false);
         
         mMessage = (TextView) v.findViewById(R.id.text_message);
+        mReceivedMsg = (TextView) v.findViewById(R.id.text_status);
         
         mSendButtonText = (Button) v.findViewById(R.id.button_send);
         mSendButtonText.setOnClickListener(new OnClickListener() {
@@ -42,6 +45,8 @@ public class MainFragment extends Fragment {
             }
         });
 
+        mSetAlarm = (Button) v.findViewById(R.id.btn_set_alarm);     
+        
         mSetTime = (Button) v.findViewById(R.id.button_setcurrenttime);
         mSetTime.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
@@ -49,7 +54,8 @@ public class MainFragment extends Fragment {
                 Calendar c = Calendar.getInstance();
                 int hr = c.get(Calendar.HOUR_OF_DAY);
                 int mi = c.get(Calendar.MINUTE);
-            	String msg = "P ST " + Integer.toString(hr) + " " + Integer.toString(mi) + ";";
+                int se = c.get(Calendar.SECOND);
+            	String msg = "P ST " + Integer.toString(hr) + " " + Integer.toString(mi) + " " + Integer.toString(se) + ";";
             	BluetoothHC05.mSingleton.sendMessage(msg);
             }
         });
@@ -99,5 +105,4 @@ public class MainFragment extends Fragment {
 	public void setAlarmText(String str) {
 		mAlarmText.setText(str);
 	}
-
 } 

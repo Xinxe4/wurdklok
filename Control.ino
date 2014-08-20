@@ -50,10 +50,11 @@ void printMatrix(const boolean ledBits[]) {
       }
       if (r<4) {
         if (ledBits[c+(((r/2)+8)*LED_COLS)]==1) {
-          if(r%2) {
-            bitSet(arr3,c-7);
-          } else {
+          if(c<7 && r%2) {
             bitSet(arr3,c+1);
+          }
+          if (c>=7 && !(r%2)) {
+            bitSet(arr3,c-6);
           }
         }
       }

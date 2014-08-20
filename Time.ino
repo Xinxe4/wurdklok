@@ -1,4 +1,8 @@
 
+byte alm_h = 0;
+byte alm_m = 0;
+boolean alm_set = false;
+
 void set_RTC_time(int y, int m, int d, int hh, int mm, int ss) {
   tmElements_t tmSet;
   tmSet.Year = y - 1970;
@@ -31,11 +35,18 @@ void get_RTC_time() {
 }
 
 void set_RTC_alarm(int h, int m) {
+  tmElements_t amSet;
+  amSet.Hour = h;
+  amSet.Minute = m;
+  RTC.set(makeTime(amSet), ALARM1_ADDRESS); // set the clock
+}
+
+void get_RTC_alarm() {
   setTime( RTC.get(ALARM1_ADDRESS) );
 }
 
-void check_for_alarm() {
-  
+boolean check_for_alarm() {
+  return (digitalRead(PORT_ALARM)==HIGH);
 }
 
 

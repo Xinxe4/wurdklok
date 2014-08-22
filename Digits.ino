@@ -203,21 +203,70 @@ static void compose2(int ledToAdd, boolean ledBits[]) {
 void print_temperature() {
   char tc[3] = {0};
   get_temperature_char( tc );
+  add_leading_zero(tc, get_temperature()/10);
   
   boolean ledBits[NR_LEDS];
   memfill(ledBits, NR_LEDS, 0);
   
   for (int i=0; i<3; i++) {
-    if (i<2) {
-      print_char_4x5(ledBits, i*5, 0, tc[i]);
-    } else {
-      print_char_4x5(ledBits, (i*5)+1, 0, tc[i]);
-    }
+      print_char_3x5(ledBits, i*4, 0, tc[i]);
   }
 
-  compose2(84,ledBits);
+  compose2(82,ledBits); //dot
+  print_char_3x5(ledBits, 12, 5, 'A'); //C
   
   printMatrix(ledBits);
+}
+
+void print_max() {
+  char tc[3] = {0};
+  int ti = get_temperature_max();
+  itoa(ti,tc,10);
+  
+  boolean ledBits[NR_LEDS];
+  memfill(ledBits, NR_LEDS, 0);
+  
+  for (int i=0; i<3; i++) {
+    print_char_3x5(ledBits, 2+(i*4), 0, tc[i]);
+  }
+  
+  print_char_7x4(ledBits, 0, 6, '2');
+  print_char_7x4(ledBits, 7, 6, '3');
+  
+  compose2(84,ledBits); //dot
+  
+  printMatrix(ledBits); 
+}
+
+void show_date() {
+  get_RTC_time();
+  char dc[3] = {0};
+  char mc[3] = {0};
+  int di = day();
+  int mi = month();
+  itoa(di, dc, 10);
+  itoa(mi, mc, 10);
+  
+  boolean ledBits[NR_LEDS];
+  memfill(ledBits, NR_LEDS, 0);
+  
+  add_leading_zero(dc, di);
+  add_leading_zero(mc, mi);
+  
+  for (int i=0; i<2; i++) {
+    print_char_3x5(ledBits, i*4, 0, dc[i]);
+    print_char_3x5(ledBits, 8+(i*4), 5, mc[i]);
+  }
+  
+  printMatrix(ledBits);
+}
+
+void add_leading_zero(char * c, int i) {
+  if (i<10) {
+    char a;
+    c[1] = c[0];
+    c[0] = '0';
+  }
 }
 
 

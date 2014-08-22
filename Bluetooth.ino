@@ -16,6 +16,7 @@
 // SS### = Set single LED [1-150]
 // MD##  = Set current mode
 // PT    = Print temperature
+// MB#   = Move bat (pong, 0=up)
 
 void unrecognized(const char * cmd) {
 }
@@ -55,21 +56,23 @@ void processCommand() {
   }
   
   if (strcmp(cmd, "ST") == 0) {
-      set_RTC_time(a, b, 0);
+      set_RTC_time(a, b, c);
       setCurrentMode(CLOCK_MODE);
       show_current_time();
   } else if (strcmp(cmd, "SM") == 0) {
       set_manual_brightness(a);
   } else if (strcmp(cmd, "SB") == 0) {
       set_brightness_value(a);
+  } else if (strcmp(cmd, "MB") == 0) {
+      moveBat(a);
+  } else if (strcmp(cmd, "SS") == 0) {
+      add_to_drawing(a);
   } else if (strcmp(cmd, "SD") == 0) {
       set_RTC_date(a, b, c);
   } else if (strcmp(cmd, "SA") == 0) {
       set_RTC_alarm(a, b);
   } else if (strcmp(cmd, "MD") == 0) {
       setCurrentMode(a);
-  } else if (strcmp(cmd, "SS") == 0) {
-      add_to_drawing(a);
   }
   mySerial.print(F("END;"));
 }
@@ -98,6 +101,12 @@ void BT_GA() {
   mySerial.print("GA;");
   mySerial.print("0000");
   sendLimChar();
+}
+
+void BT_GD() {
+  mySerial.print("GD;");
+  mySerial.print(day());sendLimChar();
+  mySerial.print(month());sendLimChar();
 } 
 
 void sendLimChar() {

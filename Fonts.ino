@@ -13,7 +13,7 @@
   @param (in) font the font definition
   @param (in) height the height of one character in the font in pixel 
 */
-void character_definition(byte data[], const char c, const int font[], const int height) {
+void character_definition(byte data[], const char c, const byte font[], const int height) {
   
   int offset = 0;
   
@@ -55,6 +55,25 @@ void print_char_4x5(boolean ledBits[], const int xpos, const int ypos, const cha
   print_char(ledBits, xpos, ypos, c, CHAR_SET_4x5, 4, 5);
 }
 
+/**
+  Add a character from the 3x5 font to the led array at the given position.
+  
+  Positions outside of the LED array will be silently ignored.
+  
+  @param (out) ledBits bits for the LEDs (will NOT be cleared)
+  @param (in) xpos horizontal position of the characters left upper edge 
+              (starts at 0)
+  @param (in) ypos vertical position of the characters left upper edge 
+              (starts at 0)
+  @param (in) c the character to display
+*/  
+void print_char_3x5(boolean ledBits[], const int xpos, const int ypos, const char c) {
+  print_char(ledBits, xpos, ypos, c, CHAR_SET_3x5, 3, 5);
+}
+
+void print_char_7x4(boolean ledBits[], const int xpos, const int ypos, const char c) {
+  print_char(ledBits, xpos, ypos, c, CHAR_SET_7x4, 7, 4);
+}
 
 /**
   Add a charcter from to the led array at the given position.
@@ -73,7 +92,7 @@ void print_char_4x5(boolean ledBits[], const int xpos, const int ypos, const cha
 */  
 
 void print_char(boolean ledBits[], const int xpos, const int ypos, const char c, 
-    const int font[], const int width, const int height) {
+    const byte font[], const int width, const int height) {
 
   byte data[height];  
   character_definition(data, c, font, height); 

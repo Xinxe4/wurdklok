@@ -22,7 +22,7 @@ static int currentMode;          // What mode the clock is in (clock, temperatur
 static boolean drawing[NR_LEDS];
 
 void setup() {
-  mySerial.begin(9600);
+  mySerial.begin(38400);
   hardware_initialize();
   digitalWrite(PORT_STATUS_LED, 1);
   sCmd.addCommand("ON",    LED_on);          // Turns LED on
@@ -48,27 +48,29 @@ void loop() {
   
   static unsigned long loopCounter;
   
-  if (loopCounter % LOOP_CLOCK == 0) {
+  if (loopCounter % LOOP_2SEC == 0) {
     if (currentMode == CLOCK_MODE) {
       show_current_time();
     }
-  }
-  if (loopCounter % LOOP_ALARM == 0) {
-    check_for_alarm();
-  }
-  if (loopCounter % LOOP_BRIGHTNESS == 0) {
-    adjust_brightness();
-  }
-  if (loopCounter % LOOP_TEMPERATURE == 0) {
     mySerial.print("FR;");
     mySerial.print(freeRam()); sendLimChar();
+  }
+  if (loopCounter % LOOP_20S == 0) {
+    check_for_alarm();
+  }
+  if (loopCounter % LOOP_1SEC == 0) {
     read_temperature();
     if (currentMode == TEMPERATURE_MODE) {
       print_temperature();
     }
+    adjust_brightness();
   }
-  
-  if (loopCounter % LOOP_BLUETOOTH == 0) {
+  if (loopCounter % LOOP_250MS == 0) {
+     if (currentMode == PONG_MODE ) {
+       runPong();
+     }
+  }
+  if (loopCounter % LOOP_20MS == 0) {
         sCmd.readSerial(mySerial);  
   }
   
@@ -84,6 +86,12 @@ void setCurrentMode(int mode) {
     show_current_time();
   } else if (currentMode == TEMPERATURE_MODE) {
     print_temperature();
+  } else if (currentMode == TEMP_MINMAX_MODE) {
+    print_max();
+  } else if (currentMode == DATE_MODE) {
+    show_date();
+  } else if (currentMode == PONG_MODE) {
+    initPong();
   }
 }
 

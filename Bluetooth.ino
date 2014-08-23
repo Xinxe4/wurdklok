@@ -6,8 +6,8 @@
 // SD###### = Set date (DDMMYY)
 // GS = Get alarms state (0 = off, 1 = on)
 // ST#### = Set time (HHMM)
-// GL# = Get alarm activated (0 = off, 1 = on)
-// SL# = Activate alarm (0 = off, 1 = on)
+// AA# = Get alarm activated (0 = off, 1 = on)
+// TA# = Toggle alarm (0 = off, 1 = on)
 // GM# = Get manual brightness setting (0 = auto, 1 = man)
 // SM# = Set manual brightness setting (0 = auto, 1 = man)
 // GB### = Get brightness val(0 = off, 255 = full)
@@ -71,6 +71,8 @@ void processCommand() {
       set_RTC_date(a, b, c);
   } else if (strcmp(cmd, "SA") == 0) {
       set_RTC_alarm(a, b);
+  } else if (strcmp(cmd, "TA") == 0) {
+      activate_alarm(a);
   } else if (strcmp(cmd, "MD") == 0) {
       setCurrentMode(a);
   }
@@ -98,9 +100,11 @@ void BT_GM() {
 } 
 
 void BT_GA() {
+  get_RTC_alarm();
   mySerial.print("GA;");
-  mySerial.print("0000");
-  sendLimChar();
+  mySerial.print(hour());sendLimChar();
+  mySerial.print(minute());sendLimChar();
+  get_RTC_time();
 }
 
 void BT_GD() {
@@ -113,6 +117,12 @@ void BT_PS(byte sc) {
   mySerial.print("PS;");
   mySerial.print(sc);sendLimChar();
 }
+
+void BT_AA() {
+  mySerial.print("AA;");
+  mySerial.print(is_alarm_active());sendLimChar();
+}
+
 
 void sendLimChar() {
   mySerial.print(";");

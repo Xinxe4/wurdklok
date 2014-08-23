@@ -35,6 +35,15 @@ const int TSIENEN[] = { 76,77,78,79,80,81,82, -1 };
 const int ALVEN[] = { 100,101,102,103,104, -1 };
 const int TOLVEN[] = { 84,85,86,87,88,89, -1 };
 
+const int MIDDEIS[] = { 135,136,137,138,139,140,141, -1 };
+const int NACHTS[] = { 143,144,145,146,147,148, -1 };
+const int MOARNS[] = { 124,125,126,127,128,129, -1 };
+const int JUNS[] = { 131,132,133,134, -1 };
+const int YNE[] = { 120,121,123, -1 };
+const int NACHT[] = { 143,144,145,146,147, -1 };
+const int JUN[] = { 131,132,133, -1 };
+const int MIDDEI[] = { 135,136,137,138,139,140, -1 };
+
 void show_current_time() {
   int hours;
   int minutes;
@@ -165,7 +174,18 @@ void show_current_time() {
           break;    
     }   
   }
- 
+  
+  if (hours < 6) {
+    compose(NACHTS, ledBits);
+  } else if (hours < 12) {
+    compose(MOARNS, ledBits);
+  } else if (hours < 18) {
+    compose(MIDDEIS, ledBits);
+  } else {
+    compose(YNE, ledBits);
+    compose(JUN, ledBits);
+  }
+  
   printMatrix(ledBits);
 }
 

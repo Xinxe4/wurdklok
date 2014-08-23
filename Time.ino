@@ -1,8 +1,4 @@
 
-byte alm_h = 0;
-byte alm_m = 0;
-boolean alm_set = false;
-
 void set_RTC_time(int y, int m, int d, int hh, int mm, int ss) {
   tmElements_t tmSet;
   tmSet.Year = y - 1970;
@@ -46,9 +42,25 @@ void get_RTC_alarm() {
 }
 
 boolean check_for_alarm() {
-  return (digitalRead(PORT_ALARM)==HIGH);
+  if (digitalRead(PORT_ALARM)==HIGH) {
+    LED_on();
+    return true;
+  } else {
+    return false;
+  }
 }
 
+void activate_alarm(int a) {
+  (a>0) ? RTC.enableAlarm(ALARM1_ADDRESS) : RTC.disableAlarm(ALARM1_ADDRESS);
+}
+
+boolean is_alarm_active() {
+  return RTC.alarm_is_set();
+}
+
+void reset_alarm() {
+  return RTC.resetAlarms();
+}
 
 
 

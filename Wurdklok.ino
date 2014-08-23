@@ -13,9 +13,6 @@ SoftwareSerial mySerial = SoftwareSerial(PORT_BT_TX,PORT_BT_RX); // (RX, TX)
 Adafruit_MCP9808 tempsensor = Adafruit_MCP9808();
 SerialCommand sCmd;     // SerialCommand object
 
-//char* commandBT;                // a string to hold incoming bluetooth command
-//commandBT = (char*)malloc(64 * sizeof(char));
-//commandBT = "";
 boolean commandEnded = false;    // whether the command is completely received
 static int currentMode;          // What mode the clock is in (clock, temperature, etc)
 
@@ -31,6 +28,7 @@ void setup() {
   sCmd.addCommand("GB",    BT_GB);
   sCmd.addCommand("GA",    BT_GA);
   sCmd.addCommand("GM",    BT_GM);
+  sCmd.addCommand("AA",    BT_AA);
   sCmd.addCommand("P",     processCommand);  // Converts two arguments to integers and echos them back
   sCmd.setDefaultHandler(unrecognized);      // Handler for command that isn't matched
   if (!RTC.time_is_set()) {set_RTC_time(2014,8,10,13,20,0);}

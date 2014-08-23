@@ -115,21 +115,25 @@ public class BluetoothHC05 extends Activity {
         ActionBar.Tab MainTab = actionbar.newTab().setText("Main");
         ActionBar.Tab DrawingTab = actionbar.newTab().setText("Drawing");
         ActionBar.Tab TemperatureTab = actionbar.newTab().setText("Temperature");
+        ActionBar.Tab PongTab = actionbar.newTab().setText("Pong");
         
         //create the two fragments we want to use for display content
         Fragment MainFragment = new MainFragment();
         Fragment DrawingFragment = new DrawingFragment();
         Fragment TemperatureFragment = new TemperatureFragment();
+        Fragment PongFragment = new PongFragment();
         
         //set the Tab listener. Now we can listen for clicks.
         MainTab.setTabListener(new MyTabsListener(MainFragment, getApplicationContext()));
         DrawingTab.setTabListener(new MyTabsListener(DrawingFragment,getApplicationContext()));
         TemperatureTab.setTabListener(new MyTabsListener(TemperatureFragment,getApplicationContext()));
+        PongTab.setTabListener(new MyTabsListener(PongFragment,getApplicationContext()));
         
         //add the two tabs to the actionbar
         actionbar.addTab(MainTab);
         actionbar.addTab(DrawingTab);
         actionbar.addTab(TemperatureTab);
+        actionbar.addTab(PongTab);
         
     	DisplayMetrics metrics = new DisplayMetrics();
     	getWindowManager().getDefaultDisplay().getMetrics(metrics);

@@ -65,7 +65,7 @@ void loop() {
     }
     adjust_brightness();
   }
-  if (loopCounter % LOOP_250MS == 0) {
+  if (loopCounter % LOOP_100MS == 0) {
      if (currentMode == PONG_MODE ) {
        runPong();
      }

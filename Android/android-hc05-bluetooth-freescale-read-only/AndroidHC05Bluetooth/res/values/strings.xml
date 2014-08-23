@@ -32,6 +32,8 @@
 	<string name="brightness">"Helderens"</string>
 	<string name="on">Oan</string>
     <string name="off">Ut</string>
+    <string name="up">Omheech</string>
+    <string name="down">Omleech</string>
     <string name="auto">Auto</string>
     <string name="self">Sels</string>
     <string name="refresh">Vernije</string>

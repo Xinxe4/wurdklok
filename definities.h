@@ -2,11 +2,11 @@
 #define LED_ROWS 10
 #define NR_LEDS (LED_COLS * LED_ROWS)
 #define INTERVAL 10
-#define LOOP_2SEC (2000 / INTERVAL)
-#define LOOP_1SEC (1000 / INTERVAL)
-#define LOOP_250MS (250 / INTERVAL) //20 ms
+#define LOOP_2SEC (1990 / INTERVAL)
+#define LOOP_1SEC (990 / INTERVAL)
+#define LOOP_100MS (100 / INTERVAL) //20 ms
 #define LOOP_20MS (20 / INTERVAL) //20 ms
-#define LOOP_20S (20000 / INTERVAL) // Check alarm every 10 sec
+#define LOOP_20S (20000 / INTERVAL) // Check alarm every 20 sec
 #define FULL_AMBIENT_LIGHT 1 // Measurement of the photo resistor for maximum light
 #define NO_AMBIENT_LIGHT 1024.0 // Measurement of the photo resistor for complete darkness
 

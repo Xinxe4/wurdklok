@@ -16,6 +16,8 @@ Android/android-hc05-bluetooth-freescale-read-only/AndroidHC05Bluetooth/gen
 
 # Java class files
 *.class
+*.classpath
+*.project
 
 # Generated files
 bin/

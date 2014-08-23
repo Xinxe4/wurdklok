@@ -4,7 +4,7 @@
 #define INTERVAL 10
 #define LOOP_2SEC (1990 / INTERVAL)
 #define LOOP_1SEC (990 / INTERVAL)
-#define LOOP_100MS (100 / INTERVAL) //20 ms
+#define LOOP_70MS (70 / INTERVAL) //70 ms
 #define LOOP_20MS (20 / INTERVAL) //20 ms
 #define LOOP_20S (20000 / INTERVAL) // Check alarm every 20 sec
 #define FULL_AMBIENT_LIGHT 1 // Measurement of the photo resistor for maximum light

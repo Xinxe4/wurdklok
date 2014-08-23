@@ -107,7 +107,12 @@ void BT_GD() {
   mySerial.print("GD;");
   mySerial.print(day());sendLimChar();
   mySerial.print(month());sendLimChar();
-} 
+}
+
+void BT_PS(byte sc) {
+  mySerial.print("PS;");
+  mySerial.print(sc);sendLimChar();
+}
 
 void sendLimChar() {
   mySerial.print(";");

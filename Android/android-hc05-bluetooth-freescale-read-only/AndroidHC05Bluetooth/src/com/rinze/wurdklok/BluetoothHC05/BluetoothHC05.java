@@ -346,6 +346,17 @@ public class BluetoothHC05 extends Activity {
 								cmdBuffer.remove(0);
 								cmdBuffer.trimToSize();
 							}
+						} else if (cmdBuffer.get(0).contains("PS")) {
+							if (cmdBuffer.size() > 1 && cmdBuffer.get(1)!="") {
+								try {
+									PongFragment.mScore.setText(cmdBuffer.get(1).substring(0));
+								} catch (Exception e) {
+									if(D){Log.e(TAG, "Failed to parse int");}
+								}
+								cmdBuffer.remove(1);
+								cmdBuffer.remove(0);
+								cmdBuffer.trimToSize();
+							}
 						} else if (cmdBuffer.get(0).contains("END")) {
 								cmdBuffer.remove(0);
 								cmdBuffer.trimToSize();

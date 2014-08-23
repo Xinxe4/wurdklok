@@ -28,6 +28,7 @@ struct{
 
 
 void initPong() {
+  pts = 0;
   splashTimer = 0;
   b1y = 4;
   b2y = 4;
@@ -37,6 +38,7 @@ void initPong() {
   ball.dir = Dir(random(1,7));
   ball.spd = SLOWEST;
   showStartPong();
+  BT_PS(pts);
 }
 
 void showStartPong() {
@@ -57,29 +59,33 @@ void runPong() {
     splashTimer += 1;
   } else {
     
-    boolean ledBits[NR_LEDS];
-    memfill(ledBits, NR_LEDS, 0);
-    
     if (ball.lastMove == ball.spd) {
       ball.lastMove = 0;
       if (moveBall()) {
         //Ball dropped
         initPong();
+      } else {
+        updatePongScreen();
       }
     } else {
         ball.lastMove += 1;
     }
-    
-    if (!(splashTimer<15)) {
-      compose2(xyToLed(ball.x,ball.y),ledBits); //ball
-      compose2(xyToLed(0,b1y),ledBits);   //bat
-      compose2(xyToLed(0,b1y+1),ledBits); //bat     
-      compose2(xyToLed(14,b2y),ledBits);  //bat
-      compose2(xyToLed(14,b2y+1),ledBits);//bat     
-      printMatrix(ledBits);
-    }
   }
 }
+
+void updatePongScreen() {
+    boolean ledBits[NR_LEDS];
+    memfill(ledBits, NR_LEDS, 0);
+    
+    compose2(xyToLed(ball.x,ball.y),ledBits); //ball
+    compose2(xyToLed(0,b1y),ledBits);   //bat
+    compose2(xyToLed(0,b1y+1),ledBits); //bat     
+    compose2(xyToLed(14,b2y),ledBits);  //bat
+    compose2(xyToLed(14,b2y+1),ledBits);//bat     
+    
+    printMatrix(ledBits);
+}
+  
   
 boolean moveBall() {
   boolean droppedBall = false;
@@ -87,12 +93,12 @@ boolean moveBall() {
   if (ball.x == 13 || ball.x == 1) {
     if (ballSaved()) {
       switch (ball.dir) {
-        case RIGHT_DOWN: ball.x -= 1; ball.dir = LEFT_DOWN; break;
-        case RIGHT_UP  : ball.x -= 1; ball.dir = LEFT_UP;   break;
-        case RIGHT     : ball.x -= 1; ball.dir = LEFT_UP;   break;
-        case LEFT_DOWN : ball.x += 1; ball.dir = RIGHT_DOWN; break;
-        case LEFT_UP   : ball.x += 1; ball.dir = RIGHT_UP;   break;
-        case LEFT      : ball.x += 1; ball.dir = RIGHT_UP;   break;
+        case RIGHT_DOWN: ball.x -= 1; ballToLeft();  break;
+        case RIGHT_UP  : ball.x -= 1; ballToLeft();  break;
+        case RIGHT     : ball.x -= 1; ballToLeft();  break;
+        case LEFT_DOWN : ball.x += 1; ballToRight(); break;
+        case LEFT_UP   : ball.x += 1; ballToRight(); break;
+        case LEFT      : ball.x += 1; ballToRight(); break;
       }
       if (ball.spd>FASTEST) {
         ball.spd = (Speed) ((int)ball.spd-1);
@@ -124,7 +130,31 @@ boolean moveBall() {
     }
   }
   
+  moveAI();
+  
   return droppedBall;
+}
+
+void ballToRight() { 
+  byte r = random(100);
+  if (r<40) {
+    ball.dir = RIGHT_UP;
+  } else if (r<80) {
+    ball.dir = RIGHT_DOWN;
+  } else {
+    ball.dir = RIGHT;
+  }
+}
+  
+void ballToLeft() { 
+  byte r = random(100);
+  if (r<40) {
+    ball.dir = LEFT_UP;
+  } else if (r<80) {
+    ball.dir = LEFT_DOWN;
+  } else {
+    ball.dir = LEFT;
+  }
 }
 
 void moveAI() {
@@ -143,10 +173,12 @@ void moveBat(byte drct) {
   } else if (drct == 1 && b1y < 8) {
     b1y += 1;
   }
+  updatePongScreen();
 }
 
 boolean ballSaved() {
   if (ball.x == 1) {
+    BT_PS(++pts);
     return (ball.y == b1y || ball.y ==(b1y+1));
   } else {
     return (ball.y == b2y || ball.y ==(b2y+1));

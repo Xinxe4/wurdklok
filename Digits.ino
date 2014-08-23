@@ -25,7 +25,7 @@ const int TOLVE[] = { 84,85,86,87,88, -1 };
 const int IENEN[] = { 78,79,80,81,82, -1 };
 const int TWAEN[] = { 95,96,97,98,99, -1 };
 const int TRIJEN[] = { 60,61,62,63,64,65, -1 };
-const int FJOUWEREN[] = { 45,46,47,48,49,50,51,52,53 -1 };
+const int FJOUWEREN[] = { 45,46,47,48,49,50,51,52,53, -1 };
 const int FIVEN[] = { 105,106,107,108,109, -1 };
 const int SEIZEN[] = { 54,55,56,57,58,59, -1 };
 const int SANEN[] = { 90,91,92,93,94, -1 };
@@ -263,7 +263,6 @@ void show_date() {
 
 void add_leading_zero(char * c, int i) {
   if (i<10) {
-    char a;
     c[1] = c[0];
     c[0] = '0';
   }

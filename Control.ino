@@ -56,6 +56,9 @@ void printMatrix(const boolean ledBits[]) {
           if (c>=7 && !(r%2)) {
             bitSet(arr3,c-6);
           }
+          if (c==14 && !(r%2)) {
+            bitSet(arr3,c-14);
+          }
         }
       }
       

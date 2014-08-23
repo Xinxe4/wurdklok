@@ -1,6 +1,7 @@
 
 const byte bsize = 2;
 byte splashTimer;
+byte AImove;
 byte b1y, b2y, pts;
 enum Dir{
         LEFT_DOWN = 1,
@@ -29,6 +30,7 @@ struct{
 
 void initPong() {
   pts = 0;
+  AImove = 0;
   splashTimer = 0;
   b1y = 4;
   b2y = 4;
@@ -69,6 +71,14 @@ void runPong() {
       }
     } else {
         ball.lastMove += 1;
+    }
+    
+    if (AImove == (int)FAST) {
+      moveAI();
+      AImove = 0;
+      updatePongScreen();
+    } else {
+      AImove += 1;
     }
   }
 }
@@ -130,8 +140,6 @@ boolean moveBall() {
     }
   }
   
-  moveAI();
-  
   return droppedBall;
 }
 
@@ -178,8 +186,12 @@ void moveBat(byte drct) {
 
 boolean ballSaved() {
   if (ball.x == 1) {
-    BT_PS(++pts);
-    return (ball.y == b1y || ball.y ==(b1y+1));
+    if ((ball.y == b1y) || (ball.y ==(b1y+1)) || (ball.y == b1y-1 && ball.dir == LEFT_DOWN) || (ball.y == b1y+2 && ball.dir == LEFT_UP)) {
+      BT_PS(++pts);
+      return true;
+    } else { 
+      return false;
+    }
   } else {
     return (ball.y == b2y || ball.y ==(b2y+1));
   }

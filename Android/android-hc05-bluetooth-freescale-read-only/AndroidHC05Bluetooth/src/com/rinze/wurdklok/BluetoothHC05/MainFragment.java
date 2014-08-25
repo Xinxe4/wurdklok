@@ -22,10 +22,10 @@ public class MainFragment extends Fragment {
     private TextView mMessage;
     private Button mSetTime;   
     private Button mSetAlarm;
-    private ToggleButton mAlarmToggle;
+    public static ToggleButton mAlarmToggle;
     public static ToggleButton mBrightnessToggle;
     public static SeekBar mBrightnessSlider;
-    private TextView mAlarmText;
+    public static TextView mAlarmText;
     public static TextView mReceivedMsg;
     
     @Override
@@ -62,6 +62,19 @@ public class MainFragment extends Fragment {
         
         mAlarmText = (TextView) v.findViewById(R.id.alarm_time);
         mAlarmToggle = (ToggleButton) v.findViewById(R.id.toggleAlarmButton);
+        mAlarmToggle.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				ToggleButton mTB = (ToggleButton) v;
+				if(mTB.isChecked()) {
+					BluetoothHC05.mSingleton.sendMessage("P TA 1;");
+					BluetoothHC05.mSingleton.sendMessage("AA;");
+				} else {
+					BluetoothHC05.mSingleton.sendMessage("P TA 0;");
+					BluetoothHC05.mSingleton.sendMessage("AA;");
+				}
+			}
+		});
+        
         mBrightnessSlider = (SeekBar) v.findViewById(R.id.brightness_slider);
         mBrightnessSlider.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			public void onStopTrackingTouch(SeekBar seekBar) {
@@ -91,8 +104,6 @@ public class MainFragment extends Fragment {
 				}
 			}
 		});
-        
-        mAlarmText = (TextView) v.findViewById(R.id.text_status);
         
         return v;
     }

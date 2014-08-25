@@ -215,8 +215,9 @@ public class BluetoothHC05 extends Activity {
     	Log.i(TAG, "updateSettings");
     	activateViews(activeViews, true);
     	sendMessage("GM;");
+    	sendMessage("AA;");
     	//sendMessage("GB;");
-    	//sendMessage("GA;");
+    	sendMessage("GA;");
     }
     
     @Override
@@ -334,14 +335,41 @@ public class BluetoothHC05 extends Activity {
 								cmdBuffer.remove(0);
 								cmdBuffer.trimToSize();
 							}
+						} else if (cmdBuffer.get(0).contains("AA")) {
+							if (cmdBuffer.size() > 1 && cmdBuffer.get(1)!="") {
+		    					try {
+									int man = Integer.parseInt(cmdBuffer.get(1).substring(0));
+									MainFragment.mAlarmToggle.setChecked(man>0);
+								} catch (Exception e) {
+									if(D){Log.e(TAG, "Failed to parse int");}
+								}
+								cmdBuffer.remove(1);
+								cmdBuffer.remove(0);
+								cmdBuffer.trimToSize();
+							}
 						} else if (cmdBuffer.get(0).contains("GT")) {
 							if (cmdBuffer.size() > 1 && cmdBuffer.get(1)!="") {
 								try {
 									int T = Integer.parseInt(cmdBuffer.get(1).substring(0));
 									TemperatureFragment.setTemperature(T);
 								} catch (Exception e) {
-									if(D){Log.e(TAG, "Failed to parse int");}
+									if(D){Log.e(TAG, "Failed to parse int GT");}
 								}
+								cmdBuffer.remove(1);
+								cmdBuffer.remove(0);
+								cmdBuffer.trimToSize();
+							}
+						} else if (cmdBuffer.get(0).contains("GA")) {
+							if (cmdBuffer.size() > 2 && cmdBuffer.get(1)!="" && cmdBuffer.get(2)!="") {
+								try {
+									int H = Integer.parseInt(cmdBuffer.get(1).substring(0));
+									int M = Integer.parseInt(cmdBuffer.get(2).substring(0));
+									MainFragment.mAlarmText.setText(String.format("%02d:%02d", H, M));
+									if(D){Log.e(TAG, "Alarm time: " + Integer.toString(H) + ":" + Integer.toString(M));}
+								} catch (Exception e) {
+									if(D){Log.e(TAG, "Failed to parse int GA");}
+								}
+								cmdBuffer.remove(2);
 								cmdBuffer.remove(1);
 								cmdBuffer.remove(0);
 								cmdBuffer.trimToSize();

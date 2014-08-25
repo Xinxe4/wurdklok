@@ -171,7 +171,9 @@ void show_current_time() {
       case 11: compose(ALVEN, ledBits);
           break;     
       case 12: compose(TOLVEN, ledBits);
-          break;    
+          break;
+      case 13: compose(IENEN, ledBits);
+          break;  
     }   
   }
   

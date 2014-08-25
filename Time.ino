@@ -42,7 +42,7 @@ void get_RTC_alarm() {
 }
 
 boolean check_for_alarm() {
-  if (digitalRead(PORT_ALARM)==HIGH) {
+  if (digitalRead(PORT_ALARM)==LOW) {
     LED_on();
     return true;
   } else {

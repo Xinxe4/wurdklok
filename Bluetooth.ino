@@ -75,6 +75,8 @@ void processCommand() {
       activate_alarm(a);
   } else if (strcmp(cmd, "MD") == 0) {
       setCurrentMode(a);
+  } else if (strcmp(cmd, "RA") == 0) {
+      reset_alarm();
   }
   mySerial.print(F("END;"));
 }

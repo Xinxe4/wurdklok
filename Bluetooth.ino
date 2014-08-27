@@ -106,6 +106,7 @@ void BT_GA() {
   mySerial.print("GA;");
   mySerial.print(hour());sendLimChar();
   mySerial.print(minute());sendLimChar();
+  mySerial.print("END;");
   get_RTC_time();
 }
 

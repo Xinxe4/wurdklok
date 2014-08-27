@@ -7,6 +7,7 @@ import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.widget.TimePicker;
 
 public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
@@ -24,6 +25,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 	}
 	
 	public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+		  if(BluetoothHC05.D) Log.i(BluetoothHC05.TAG, "Alarm timepicker set");
 		  BluetoothHC05.mSingleton.sendMessage("P SA "+Integer.toString(hourOfDay)+" "+Integer.toString(minute)+";");
 		  BluetoothHC05.mSingleton.sendMessage("GA;");
 		}

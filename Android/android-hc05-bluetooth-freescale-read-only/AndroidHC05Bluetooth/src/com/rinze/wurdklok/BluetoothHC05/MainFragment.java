@@ -27,6 +27,7 @@ public class MainFragment extends Fragment {
     public static SeekBar mBrightnessSlider;
     public static TextView mAlarmText;
     public static TextView mReceivedMsg;
+    public static boolean alarmTimeRead = false;
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

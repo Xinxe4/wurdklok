@@ -25,6 +25,7 @@ import android.app.Fragment;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -365,6 +366,7 @@ public class BluetoothHC05 extends Activity {
 									int H = Integer.parseInt(cmdBuffer.get(1).substring(0));
 									int M = Integer.parseInt(cmdBuffer.get(2).substring(0));
 									MainFragment.mAlarmText.setText(String.format("%02d:%02d", H, M));
+									MainFragment.alarmTimeRead = true;
 									if(D){Log.e(TAG, "Alarm time: " + Integer.toString(H) + ":" + Integer.toString(M));}
 								} catch (Exception e) {
 									if(D){Log.e(TAG, "Failed to parse int GA");}

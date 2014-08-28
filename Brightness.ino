@@ -12,11 +12,12 @@ void adjust_brightness() {
 
 int get_light_intensity() {
   int value = analogRead(PORT_LIGHT_SENSOR);
-  int scaledValue = (double) (value - FULL_AMBIENT_LIGHT) / NO_AMBIENT_LIGHT * 255.0;
+  double uniValue = (double) ((value - NO_AMBIENT_LIGHT) / FULL_AMBIENT_LIGHT);
+  int scaledValue = uniValue * uniValue * 255.0;
   if (scaledValue > 255) {
     scaledValue = 255;
   }
-  return (255 - scaledValue);
+  return (scaledValue);
 }
 
 int get_brightness_value() {
@@ -35,7 +36,7 @@ void apply_brightness(int b) {
   } else if (b_i > 15) {
     b_i = 15;
   }
-  maxTransferDupl(0x0A, (15-b_i));
+  maxTransferDupl(0x0A, b_i);
 }
 
 void set_manual_brightness(boolean b) {

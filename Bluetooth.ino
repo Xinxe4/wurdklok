@@ -126,7 +126,11 @@ void BT_AA() {
   mySerial.print(is_alarm_active());sendLimChar();
 }
 
-
+void BT_FR() {
+    mySerial.print("FR;");
+    mySerial.print(freeRam()); sendLimChar();
+}
+    
 void sendLimChar() {
   mySerial.print(";");
 }

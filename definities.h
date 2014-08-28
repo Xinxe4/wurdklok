@@ -7,8 +7,8 @@
 #define LOOP_70MS (70 / INTERVAL) //70 ms
 #define LOOP_20MS (20 / INTERVAL) //20 ms
 #define LOOP_20S (20000 / INTERVAL) // Check alarm every 20 sec
-#define FULL_AMBIENT_LIGHT 1 // Measurement of the photo resistor for maximum light
-#define NO_AMBIENT_LIGHT 1024.0 // Measurement of the photo resistor for complete darkness
+#define FULL_AMBIENT_LIGHT 1024.0 // Measurement of the photo resistor for maximum light
+#define NO_AMBIENT_LIGHT 1.0 // Measurement of the photo resistor for complete darkness
 
 
 // Pinouts

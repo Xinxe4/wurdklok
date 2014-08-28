@@ -1,6 +1,6 @@
 
 const byte bsize = 2;
-byte splashTimer;
+boolean showSplash;
 byte AImove;
 byte b1y, b2y, pts;
 enum Dir{
@@ -31,7 +31,7 @@ struct{
 void initPong() {
   pts = 0;
   AImove = 0;
-  splashTimer = 0;
+  showSplash = true;
   b1y = 4;
   b2y = 4;
   ball.lastMove = 0;
@@ -57,9 +57,7 @@ void showStartPong() {
 }
 
 void runPong() {
-  if (splashTimer<15) {
-    splashTimer += 1;
-  } else {
+  if (!showSplash) {
     
     if (ball.lastMove == ball.spd) {
       ball.lastMove = 0;
@@ -176,6 +174,7 @@ void moveAI() {
 }
 
 void moveBat(byte drct) {
+  showSplash = false;
   if (drct == 0 && b1y > 0) {
     b1y -= 1;
   } else if (drct == 1 && b1y < 8) {

@@ -1,5 +1,3 @@
-/* This file will be generated automatically. Do not edit it */
-
 #ifndef __fontdef_h
 #define __fontdef_h
 //

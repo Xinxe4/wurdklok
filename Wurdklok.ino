@@ -1,7 +1,12 @@
-#include "definities.h"
 /* 
-Wurdklok
+Fryske Wurdklok
+ - by Rinze
+ 
+Main arduino code. Includes the header files, setup and loop functions.
+
+ 
  */
+#include "definities.h"
 #include <SerialCommand.h>
 #include <SPI.h>
 #include <Wire.h>
@@ -13,10 +18,10 @@ SoftwareSerial mySerial = SoftwareSerial(PORT_BT_TX,PORT_BT_RX); // (RX, TX)
 Adafruit_MCP9808 tempsensor = Adafruit_MCP9808();
 SerialCommand sCmd;     // SerialCommand object
 
-boolean commandEnded = false;    // whether the command is completely received
-static int currentMode;          // What mode the clock is in (clock, temperature, etc)
 
-static boolean drawing[NR_LEDS];
+static int currentMode;          // Keeps track of what mode the clock is in (clock, temperature, etc)
+static boolean drawing[NR_LEDS]; // Vector representing the on/off state of each LED
+
 
 void setup() {
   mySerial.begin(38400);
@@ -43,8 +48,8 @@ show_current_time();
   mySerial.print(F("Init;"));
 }
 
+
 void loop() {
-  
   static unsigned long loopCounter;
   
   if (loopCounter % LOOP_2SEC == 0) {
@@ -70,7 +75,6 @@ void loop() {
   if (loopCounter % LOOP_20MS == 0) {
         sCmd.readSerial(mySerial);  
   }
-  
   delay(INTERVAL);
   loopCounter++;
 }

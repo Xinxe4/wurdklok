@@ -1,3 +1,4 @@
+//Low-level functions to control the hardware (MAX7221-IC)
 
 void hardware_initialize() {
  //Initialize ports

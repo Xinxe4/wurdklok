@@ -1,3 +1,5 @@
+//Functions for the RTC chip: reading/setting both time and alarm. (DS1337)
+
 
 void set_RTC_time(int y, int m, int d, int hh, int mm, int ss) {
   tmElements_t tmSet;

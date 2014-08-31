@@ -1,3 +1,4 @@
+//Code to convert high level information (time, temperature) to the respective LEDs that should be lit. 
 
 const int IT[] = { 0, 1, -1 };
 const int IS[] = { 3, 4, -1 };

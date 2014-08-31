@@ -1,3 +1,5 @@
+//Reading temperature from MCP9808 I2C temperature sensor and remembering min/max temperatures.
+
 int temp = 0;
 int temp_min = 0;
 int temp_max = 0;

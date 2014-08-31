@@ -1,3 +1,4 @@
+//Read LDR and change brightness of the digits
 
 boolean manual_brightness = false;
 int manual_brightness_val = 128;

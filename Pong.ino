@@ -1,3 +1,4 @@
+//Code for playing pong on the wordclock
 
 const byte bsize = 2;
 boolean showSplash;

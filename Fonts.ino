@@ -4,7 +4,6 @@
 
 #include "fontdef.h"
 
-
 /**
   Extracts the font definition for a given character from the font array.
   

@@ -72,7 +72,7 @@ void runPong() {
         ball.lastMove += 1;
     }
     
-    if (AImove == (int)FAST) {
+    if (AImove == (int)FASTEST) {
       moveAI();
       AImove = 0;
       updatePongScreen();

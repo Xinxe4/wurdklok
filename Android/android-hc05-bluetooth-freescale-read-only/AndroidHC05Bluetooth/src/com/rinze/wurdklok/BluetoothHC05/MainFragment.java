@@ -20,7 +20,9 @@ public class MainFragment extends Fragment {
 
     private Button mSendButtonText;
     private TextView mMessage;
-    private Button mSetTime;   
+    private Button mSetTime;
+    private Button mSetDate;
+    private Button mShowDate;
     private Button mSetAlarm;
     public static ToggleButton mAlarmToggle;
     public static ToggleButton mBrightnessToggle;
@@ -57,6 +59,28 @@ public class MainFragment extends Fragment {
                 int mi = c.get(Calendar.MINUTE);
                 int se = c.get(Calendar.SECOND);
             	String msg = "P ST " + Integer.toString(hr) + " " + Integer.toString(mi) + " " + Integer.toString(se) + ";";
+            	BluetoothHC05.mSingleton.sendMessage(msg);
+            }
+        });
+        
+        mSetDate = (Button) v.findViewById(R.id.button_setcurrentdate);
+        mSetDate.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+            	if(BluetoothHC05.D) Log.i(BluetoothHC05.TAG, "Send current date");
+                Calendar c = Calendar.getInstance();
+                int da = c.get(Calendar.DAY_OF_MONTH);
+                int mo = c.get(Calendar.MONTH)+1;
+                int ye = c.get(Calendar.YEAR);
+            	String msg = "P SD " + Integer.toString(da) + " " + Integer.toString(mo) + " " + Integer.toString(ye) + ";";
+            	BluetoothHC05.mSingleton.sendMessage(msg);
+            }
+        });
+        
+        mShowDate = (Button) v.findViewById(R.id.btn_showdate);
+        mShowDate.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+            	if(BluetoothHC05.D) Log.i(BluetoothHC05.TAG, "Show current date");
+            	String msg = "P MD 5;";
             	BluetoothHC05.mSingleton.sendMessage(msg);
             }
         });
@@ -112,6 +136,13 @@ public class MainFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
+		if (BluetoothHC05.mSingleton.mChatService.getState() == BluetoothSerialService.STATE_CONNECTED) {
+			BluetoothHC05.mSingleton.sendMessage("GM;");
+			BluetoothHC05.mSingleton.sendMessage("AA;");
+			BluetoothHC05.mSingleton.sendMessage("GB;");
+			BluetoothHC05.mSingleton.sendMessage("GA;");
+			BluetoothHC05.mSingleton.sendMessage("P MD 1;");
+		}
 	}
     
 	public void setAlarmText(String str) {

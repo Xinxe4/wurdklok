@@ -27,6 +27,8 @@
 	<string name="nothing_received">"Neat ûntfongen"</string>
 	<string name="get_alarm_time">"Helje alarm tiid"</string>
 	<string name="set_time">"Stel de tiid yn"</string>
+	<string name="set_date">"Stel de datum yn"</string>
+	<string name="show_date">"Toan de datum"</string>
 	<string name="open_matrix">Iepenje matrix</string>
 	<string name="alarm">"Alarm"</string>
 	<string name="brightness">"Helderens"</string>

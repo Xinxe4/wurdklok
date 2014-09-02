@@ -96,7 +96,7 @@ public class BluetoothHC05 extends Activity {
     // Local Bluetooth adapter
     private BluetoothAdapter mBluetoothAdapter = null;
     // Member object for the chat services
-    private BluetoothSerialService mChatService = null;
+    protected BluetoothSerialService mChatService = null;
 
 
     @Override
@@ -212,7 +212,7 @@ public class BluetoothHC05 extends Activity {
     	if(D) Log.i(TAG, "activateViews" + String.valueOf(b));
     }
     
-    private void updateSettings() {
+    public void updateSettings() {
     	Log.i(TAG, "updateSettings");
     	activateViews(activeViews, true);
     	sendMessage("GM;");

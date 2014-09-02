@@ -17,11 +17,17 @@ void set_RTC_time(int hh, int mm, int ss) {
   tmSet.Hour = hh;
   tmSet.Minute = mm;
   tmSet.Second = ss;
+  tmSet.Year = year();
+  tmSet.Month = month();
+  tmSet.Day = day();
   RTC.set(makeTime(tmSet), CLOCK_ADDRESS); // set the clock
 }
 
 void set_RTC_date(int d, int m, int y) {
   tmElements_t tmSet;
+  tmSet.Hour = hour();
+  tmSet.Minute = minute();
+  tmSet.Second = second();
   tmSet.Year = y - 1970;
   tmSet.Month = m;
   tmSet.Day = d;

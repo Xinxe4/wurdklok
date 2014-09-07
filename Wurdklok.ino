@@ -20,6 +20,7 @@ SerialCommand sCmd;     // SerialCommand object
 
 
 static int currentMode;          // Keeps track of what mode the clock is in (clock, temperature, etc)
+int togg_maxmin = true;          // Toggles between max & min temperature
 static boolean drawing[NR_LEDS]; // Vector representing the on/off state of each LED
 
 
@@ -55,6 +56,9 @@ void loop() {
   if (loopCounter % LOOP_2SEC == 0) {
     if (currentMode == CLOCK_MODE) {
       show_current_time();
+    } else if (currentMode == TEMP_MINMAX_MODE) {
+      togg_maxmin = !togg_maxmin;
+      print_maxmin(togg_maxmin);
     }
   }
   if (loopCounter % LOOP_20S == 0) {
@@ -88,7 +92,7 @@ void setCurrentMode(int mode) {
   } else if (currentMode == TEMPERATURE_MODE) {
     print_temperature();
   } else if (currentMode == TEMP_MINMAX_MODE) {
-    print_max();
+    print_maxmin(togg_maxmin);
   } else if (currentMode == DATE_MODE) {
     show_date();
   } else if (currentMode == PONG_MODE) {

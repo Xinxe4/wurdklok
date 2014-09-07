@@ -23,6 +23,7 @@ public class MainFragment extends Fragment {
     private Button mSetTime;
     private Button mSetDate;
     private Button mShowDate;
+    private Button mShowTime;
     private Button mSetAlarm;
     public static ToggleButton mAlarmToggle;
     public static ToggleButton mBrightnessToggle;
@@ -85,6 +86,15 @@ public class MainFragment extends Fragment {
             }
         });
         
+        mShowTime = (Button) v.findViewById(R.id.btn_showtime);
+        mShowTime.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+            	if(BluetoothHC05.D) Log.i(BluetoothHC05.TAG, "Show current time");
+            	String msg = "P MD 1;";
+            	BluetoothHC05.mSingleton.sendMessage(msg);
+            }
+        });
+        
         mAlarmText = (TextView) v.findViewById(R.id.alarm_time);
         mAlarmToggle = (ToggleButton) v.findViewById(R.id.toggleAlarmButton);
         mAlarmToggle.setOnClickListener(new OnClickListener() {
@@ -137,6 +147,7 @@ public class MainFragment extends Fragment {
 	public void onResume() {
 		super.onResume();
 		if (BluetoothHC05.mSingleton.mChatService.getState() == BluetoothSerialService.STATE_CONNECTED) {
+			if(BluetoothHC05.D) Log.i(BluetoothHC05.TAG, "Resume Mainfragment");
 			BluetoothHC05.mSingleton.sendMessage("GM;");
 			BluetoothHC05.mSingleton.sendMessage("AA;");
 			BluetoothHC05.mSingleton.sendMessage("GB;");

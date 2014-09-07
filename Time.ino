@@ -2,6 +2,7 @@
 
 
 void set_RTC_time(int y, int m, int d, int hh, int mm, int ss) {
+  get_RTC_time();
   tmElements_t tmSet;
   tmSet.Year = y - 1970;
   tmSet.Month = m;
@@ -13,17 +14,16 @@ void set_RTC_time(int y, int m, int d, int hh, int mm, int ss) {
 }
 
 void set_RTC_time(int hh, int mm, int ss) {
+  get_RTC_time();
   tmElements_t tmSet;
   tmSet.Hour = hh;
   tmSet.Minute = mm;
   tmSet.Second = ss;
-  tmSet.Year = year();
-  tmSet.Month = month();
-  tmSet.Day = day();
   RTC.set(makeTime(tmSet), CLOCK_ADDRESS); // set the clock
 }
 
 void set_RTC_date(int d, int m, int y) {
+  get_RTC_time();
   tmElements_t tmSet;
   tmSet.Hour = hour();
   tmSet.Minute = minute();

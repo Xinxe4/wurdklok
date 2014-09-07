@@ -21,5 +21,14 @@
         android:minHeight="64dp"
         android:minWidth="128dp"
         android:text="@string/refresh" />
+    
+    <Button
+        android:id="@+id/button_maxmin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:minHeight="64dp"
+        android:minWidth="128dp"
+        android:text="@string/maxmin" />
 
 </LinearLayout>

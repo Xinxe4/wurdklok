@@ -63,8 +63,8 @@ void printMatrix(const boolean ledBits[]) {
         }
       }
       
-      if (currentMode == CLOCK_MODE) {
-        if (r==5) { //dots
+      if (r==5) { //dots
+        if (currentMode == CLOCK_MODE) {
           int m = minute();
           int mr=(m%5);
           for (unsigned char i = 0; i<4; i++){
@@ -72,8 +72,10 @@ void printMatrix(const boolean ledBits[]) {
               bitSet(arr3,i+4);
             }  
           }
+        } else if ((currentMode == TEMPERATURE_MODE) || (currentMode == TEMP_MINMAX_MODE)){
+          bitSet(arr3,4);
         }
-      }  
+      }
     }
     maxTransfer3(r+1, arr1, r+1, arr2, r+1, arr3);
   }

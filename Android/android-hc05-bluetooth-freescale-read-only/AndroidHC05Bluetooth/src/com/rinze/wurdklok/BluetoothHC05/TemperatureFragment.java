@@ -38,6 +38,15 @@ public class TemperatureFragment extends Fragment {
             }
         });
     	
+    	Button mBtnMaxmin = (Button) v.findViewById(R.id.button_maxmin);
+    	mBtnMaxmin.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+            	if(BluetoothHC05.D) Log.i(BluetoothHC05.TAG, "Maxmin temperature");
+            	BluetoothHC05.mSingleton.sendMessage("P MD 4;");
+            	setTemperature(BluetoothHC05.TempC);
+            }
+        });
+    	
         return v;
     }
     

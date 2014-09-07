@@ -179,14 +179,14 @@ void show_current_time() {
   }
   
   if (hours < 6) {
-    compose(NACHTS, ledBits);
+    compose(YNE, ledBits);
+    compose(NACHT, ledBits);
   } else if (hours < 12) {
     compose(MOARNS, ledBits);
   } else if (hours < 18) {
     compose(MIDDEIS, ledBits);
   } else {
-    compose(YNE, ledBits);
-    compose(JUN, ledBits);
+    compose(JUNS, ledBits);
   }
   
   printMatrix(ledBits);
@@ -232,31 +232,44 @@ void print_temperature() {
   memfill(ledBits, NR_LEDS, 0);
   
   for (int i=0; i<3; i++) {
-      print_char_3x5(ledBits, i*4, 0, tc[i]);
+      print_char_3x5(ledBits, 1+(i*4), 5, tc[i]);
   }
 
-  compose2(82,ledBits); //dot
-  print_char_3x5(ledBits, 12, 5, 'A'); //C
+  compose2(73,ledBits);  //degree dot
+  compose2(74,ledBits);  //degree dot
+  compose2(88,ledBits);  //degree dot
+  compose2(89,ledBits);  //degree dot
+  //print_char_3x5(ledBits, 12, 5, 'A'); //C
   
   printMatrix(ledBits);
 }
 
-void print_max() {
+void print_maxmin(boolean maximum) {
   char tc[3] = {0};
-  int ti = get_temperature_max();
+  int ti;
+ 
+  (maximum) ? ti=get_temperature_max() : ti=get_temperature_min();
   itoa(ti,tc,10);
   
   boolean ledBits[NR_LEDS];
   memfill(ledBits, NR_LEDS, 0);
   
   for (int i=0; i<3; i++) {
-    print_char_3x5(ledBits, 2+(i*4), 0, tc[i]);
+    print_char_3x5(ledBits, 1+(i*4), 5, tc[i]);
   }
   
-  print_char_7x4(ledBits, 0, 6, '2');
-  print_char_7x4(ledBits, 7, 6, '3');
+  if (maximum) {
+    print_char_7x4(ledBits, 0, 0, '2');
+    print_char_7x4(ledBits, 7, 0, '3');
+  } else {
+    print_char_7x4(ledBits, 0, 0, '0');
+    print_char_7x4(ledBits, 7, 0, '1');
+  } 
   
-  compose2(84,ledBits); //dot
+  compose2(73,ledBits);  //degree dot
+  compose2(74,ledBits);  //degree dot
+  compose2(88,ledBits);  //degree dot
+  compose2(89,ledBits);  //degree dot
   
   printMatrix(ledBits); 
 }

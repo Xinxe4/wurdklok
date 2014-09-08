@@ -146,7 +146,7 @@ public class MainFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (BluetoothHC05.mSingleton.mChatService.getState() == BluetoothSerialService.STATE_CONNECTED) {
+		if (BluetoothHC05.mSingleton.mChatService != null && BluetoothHC05.mSingleton.mChatService.getState() == BluetoothSerialService.STATE_CONNECTED) {
 			if(BluetoothHC05.D) Log.i(BluetoothHC05.TAG, "Resume Mainfragment");
 			BluetoothHC05.mSingleton.sendMessage("GM;");
 			BluetoothHC05.mSingleton.sendMessage("AA;");
